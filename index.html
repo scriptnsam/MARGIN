@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Margin: one good page a day</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#27407a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Margin">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#e9ece6;--card:#fbfbf8;--ink:#1f2433;--mute:#667064;--line:#cdd3c8;--rule:#dfe4f0;--red:#c4524a;--acc:#27407a;--accfg:#fff;--ok:#2c7a4b;--bad:#b3362f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15181b;--card:#1e2327;--ink:#e8e6df;--mute:#a1a99b;--line:#33392f;--rule:#2b323a;--red:#e07f76;--acc:#9db4ee;--accfg:#14213f;--ok:#6fd49a;--bad:#ff938a}}
+:root[data-theme="dark"]{--bg:#15181b;--card:#1e2327;--ink:#e8e6df;--mute:#a1a99b;--line:#33392f;--rule:#2b323a;--red:#e07f76;--acc:#9db4ee;--accfg:#14213f;--ok:#6fd49a;--bad:#ff938a}
+*{box-sizing:border-box}
+html{color-scheme:light dark;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+main{max-width:600px;margin:0 auto;padding:18px 16px 100px}
+.hand{font-family:"Bradley Hand","Segoe Print","Noteworthy","Comic Sans MS",cursive}
+.hi{font-size:1.35rem;margin:0 0 2px;color:var(--ink)}
+.sub{margin:0 0 14px;color:var(--mute);font-size:.95rem}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin-bottom:8px}
+.chip{flex:none;border:0;border-bottom:2px solid transparent;background:none;color:var(--mute);padding:6px 10px;font:inherit;cursor:pointer}
+.chip[aria-pressed=true]{color:var(--ink);border-bottom-color:var(--red);font-weight:600}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:3px 10px 10px 3px;padding:22px 20px 20px 58px;box-shadow:0 1px 0 var(--line),0 6px 0 -3px var(--card),0 7px 0 -3px var(--line)}
+.card::before{content:"";position:absolute;left:42px;top:0;bottom:0;width:2px;background:var(--red);opacity:.55}
+.note{margin:0 0 2px;color:var(--red);font-size:1.1rem}
+.card h2{font:700 1.55rem/1.25 Georgia,"Iowan Old Style",serif;margin:0 0 12px}
+.body{font:1.05rem/32px Georgia,"Iowan Old Style",serif;margin:0 0 18px;background:linear-gradient(transparent 31px,var(--rule) 31px);background-size:100% 32px;background-attachment:local}
+.q{font-weight:600;margin:0 0 10px}
+.sec{font:700 1.1rem Georgia,serif;color:var(--red);margin:20px 0 6px}
+.opt{display:block;width:100%;text-align:left;margin-bottom:8px;padding:11px 14px;border:2px solid var(--line);border-radius:8px;background:transparent;color:var(--ink);font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--acc)}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,transparent)}
+:is(.opt,.chip,.btn,nav button,.link,input,select,a):focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.btn{flex:1;min-width:120px;padding:11px 14px;border-radius:8px;border:2px solid var(--acc);background:var(--acc);color:var(--accfg);font:inherit;font-weight:600;cursor:pointer;text-align:center;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--acc)}
+.msg{margin:10px 0 0;min-height:1.5em;color:var(--mute)}
+.banner{background:var(--card);border:1px dashed var(--red);border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.warn{color:var(--bad);font-size:.9rem;margin:0 0 10px}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;padding:14px 0;background:none;border:0;color:var(--mute);font:inherit;cursor:pointer}
+nav button[aria-current=page]{color:var(--ink);font-weight:700;box-shadow:inset 0 3px var(--red)}
+.item{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.item small{color:var(--mute);display:block}
+.link{background:none;border:0;color:var(--acc);font:inherit;cursor:pointer;padding:6px}
+.stats{display:flex;gap:10px;margin-bottom:14px}
+.stats div{flex:1;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px}
+.stats b{font:700 1.7rem Georgia,serif;display:block}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:3px 0 12px}
+.bar i{display:block;height:100%;background:var(--red)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:14px}
+.panel h3{margin:0 0 8px;font:700 1.15rem Georgia,serif}
+.panel label{display:flex;align-items:center;gap:8px;margin:8px 0}
+.panel input[type=time]{font:inherit;padding:6px;border:2px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.panel p{margin:8px 0;color:var(--mute);font-size:.92rem}
+</style>
+</head>
+<body>
+<main id="view"></main>
+<nav><button data-t="learn">Read</button><button data-t="saved">Saved</button><button data-t="me">You</button></nav>
+<script>
+var T=["History","Science","Religion","Philosophy","Geography"];
+var D=[
+["History","The Library of Alexandria","Founded in Egypt under the Ptolemies around the 3rd century BCE, it aimed to gather the world’s writings. Its decline was slow: funding cuts, politics and neglect over centuries mattered more than any single fire.","How did the library mostly decline?",["In one great fire","Gradually, over centuries","In an earthquake"],1],
+["History","Mansa Musa’s pilgrimage","Mansa Musa ruled the Mali Empire, rich in gold and salt trade. His 1324 pilgrimage to Mecca, with an enormous caravan, spread so much gold around Cairo that prices there were disrupted for years.","Which empire did Mansa Musa rule?",["Songhai","Mali","Ghana"],1],
+["History","Movable type in Europe","Around 1440, Johannes Gutenberg of Mainz developed a printing system using movable metal type. Books became cheaper and faster to make, which helped new ideas travel across Europe.","Who developed European movable type?",["Gutenberg","Galileo","Newton"],0],
+["History","The Rosetta Stone","Found in 1799, this slab carries one decree written in hieroglyphs, Demotic and Greek. Because scholars could read the Greek, Jean-François Champollion was able to decipher hieroglyphs in 1822.","Which language helped decode hieroglyphs?",["Latin","Greek","Arabic"],1],
+["History","The Silk Road","It was never one road. It was a web of land and sea routes linking China with the Mediterranean, carrying silk, spices and paper, and also religions, technologies and diseases.","The Silk Road was…",["A single paved road","A network of routes","A railway"],1],
+["Science","Sunlight is old news","Light from the Sun takes about 8 minutes and 20 seconds to reach Earth. If the Sun vanished, we would keep seeing it, and feeling its gravity, for that long.","How long does sunlight take to reach us?",["About 8 seconds","About 8 minutes","About 8 hours"],1],
+["Science","Two metres of you","Each human cell nucleus packs roughly two metres of DNA, wound tightly around proteins. Across all your cells, the total is many times the distance to the Sun and back.","About how much DNA is in one human cell?",["2 centimetres","2 metres","200 metres"],1],
+["Science","Who makes our oxygen?","Photosynthesis releases oxygen as a by-product. A large share of Earth’s oxygen comes from tiny ocean organisms called phytoplankton, not only from forests.","Which group makes much of Earth’s oxygen?",["Phytoplankton","Desert shrubs","Mushrooms"],0],
+["Science","Why the sky is blue","Sunlight contains all colours. Air molecules scatter short blue wavelengths far more than red ones, so blue light reaches your eyes from every part of the sky.","What does the air do to blue light?",["Absorbs it","Scatters it more","Reflects it off clouds"],1],
+["Science","The accidental antibiotic","In 1928, Alexander Fleming noticed that mould on a lab dish was killing nearby bacteria. That mould produced penicillin, which was turned into a medicine in the 1940s.","Who noticed the effect of penicillin mould?",["Fleming","Pasteur","Darwin"],0],
+["Religion","The two largest faiths","Christianity and Islam are the two largest religions by followers, together roughly half of humanity. Hinduism and Buddhism are among the oldest still practised.","Which religion has the most followers?",["Christianity","Buddhism","Judaism"],0],
+["Religion","The Abrahamic family","Judaism, Christianity and Islam each trace their heritage to Abraham, so they are called Abrahamic religions. They share figures and stories but differ in belief and practice.","Which of these is not Abrahamic?",["Islam","Judaism","Hinduism"],2],
+["Religion","The Four Noble Truths","Buddhism began with Siddhartha Gautama in northern India around the 5th century BCE. Its core teaching: suffering is real, it has a cause, it can end, and there is a path to that end.","How many Noble Truths are there?",["Three","Four","Eight"],1],
+["Religion","The Five Pillars of Islam","Muslims describe their core practices as five pillars: declaring faith, daily prayer, giving charity, fasting in Ramadan, and making the pilgrimage to Mecca once if able.","How many pillars does Islam describe?",["Three","Five","Seven"],1],
+["Religion","Sikhism","Guru Nanak founded Sikhism in Punjab in the late 15th century. It teaches belief in one God, equality of all people, honest work and community service.","Who founded Sikhism?",["Guru Nanak","Kabir","Gautama"],0],
+["Philosophy","Socrates wrote nothing","We know Socrates mainly through students, above all Plato. His method was asking probing questions until hidden assumptions came to light, now called the Socratic method.","How do we know Socrates’ ideas?",["His own books","Through students like Plato","His laws"],1],
+["Philosophy","The Stoic dial","Stoics such as Epictetus and Marcus Aurelius taught that we should put effort into what is within our control, our judgements and actions, and meet the rest calmly.","Stoics advise focusing on…",["What we control","Wealth first","Public praise"],0],
+["Philosophy","Occam’s razor","Attributed to William of Ockham, this rule of thumb says that when explanations fit the facts equally well, prefer the one with fewer assumptions. It guides reasoning; it proves nothing.","Occam’s razor prefers explanations with…",["More details","Fewer assumptions","More authority"],1],
+["Philosophy","Ubuntu","In Southern African thought, ubuntu is the idea that a person becomes fully a person through other people. It puts weight on community, hospitality and mutual care.","Ubuntu stresses…",["Community and mutual care","Personal wealth","Isolation"],0],
+["Geography","Eleven time zones","Russia spans eleven time zones. When it is breakfast in Kaliningrad, it is already evening in Kamchatka.","How many time zones does Russia span?",["Five","Eleven","Twenty"],1],
+["Geography","A river that flows north","The Nile, about 6,650 km long, flows north from East Africa to the Mediterranean. Its yearly floods once made Egyptian farming and civilisation possible.","Which way does the Nile flow?",["North","South","West"],0],
+["Geography","Africa’s most populous nation","Nigeria has the largest population in Africa, with over 200 million people and hundreds of ethnic groups. Ethiopia and Egypt come next.","Which African country has the most people?",["Ethiopia","Egypt","Nigeria"],2],
+["Geography","The green Sahara","The Sahara is the largest hot desert, about the size of the United States. Around 6,000 years ago, shifts in Earth’s orbit brought rains, and it was grassland with lakes and herds.","What was the Sahara like 6,000 years ago?",["Frozen","Green with lakes","Under the sea"],1],
+["Geography","Everest’s border","Mount Everest sits on the border between Nepal and China (Tibet). A 2020 joint survey set its height at 8,848.86 metres above sea level.","Everest lies between Nepal and…",["India","China","Bhutan"],1]
+];
+var F={
+"The Library of Alexandria":["The Library of Alexandria was the greatest research institution of the ancient Mediterranean, part of a scholarly complex called the Mouseion. Founded under the Ptolemaic rulers of Egypt in the 3rd century BCE, it collected scrolls on literature, mathematics, astronomy and medicine, perhaps hundreds of thousands in all.","The Ptolemies wanted prestige and power, and knowledge was both. Ships entering the harbour were reputedly searched so their books could be copied. The library drew scholars such as Eratosthenes, who served as its head and calculated Earth’s circumference.","Scribes copied texts by hand while scholars edited and catalogued them, which shaped how ancient works were preserved. Its end was gradual: royal funding shrank, Julius Caesar’s siege in 48 BCE damaged part of the city’s holdings, and later conflicts and neglect finished the job over centuries."],
+"Movable type in Europe":["Movable type is a printing method where each letter is a separate metal piece that can be arranged into words, inked, pressed onto paper, then rearranged for the next page. Johannes Gutenberg developed a workable European system in Mainz around 1440.","Before it, every book was copied by hand, which took months and made books expensive. Printing cut cost and time dramatically, so more people could own books, read for themselves and compare ideas. It helped fuel the Renaissance, the Reformation and the growth of science.","Gutenberg combined several things: a metal alloy that cast durable letters, an oil-based ink that stuck to metal, and a press adapted from those used for wine and olives. Typesetters assembled lines of letters in a frame, a pressman inked them and pressed the paper, and the same letters were reused. His 42-line Bible of the 1450s is the famous result."],
+"Who makes our oxygen?":["Photosynthesis is how plants, algae and some bacteria turn light, water and carbon dioxide into sugar for energy, releasing oxygen as a by-product. Phytoplankton, microscopic drifting organisms in the sea, do an enormous share of it.","Ocean photosynthesis is often estimated to account for about half of the oxygen produced each year, though much of it is used up again by living things. The oxygen we breathe built up over billions of years, starting when early cyanobacteria began photosynthesising. Phytoplankton also feed marine food webs and absorb carbon dioxide.","Inside chloroplasts, chlorophyll absorbs light and uses its energy to split water molecules. That releases oxygen and powers reactions that build sugar from carbon dioxide. Tiny floating cells do this near the sunlit ocean surface, which is why ocean health matters for the planet’s air and climate."],
+"Why the sky is blue":["The sky looks blue because of Rayleigh scattering: gas molecules in the atmosphere scatter sunlight, and they scatter short wavelengths such as blue far more strongly than long wavelengths such as red.","Sunlight looks white but contains every colour. If air did not scatter light, the sky would look black with a bright Sun, as it does on the Moon. Scattering is also why daylight reaches into shade.","Scattering strength rises steeply as wavelength gets shorter, so blue light is bounced around in all directions and reaches your eyes from everywhere you look. Violet scatters even more, but the Sun emits less of it, the upper atmosphere absorbs some, and our eyes are less sensitive to it. At sunset, light crosses more air, the blue scatters away along the path, and reds and oranges remain."],
+"The Four Noble Truths":["The Four Noble Truths are the foundation of Buddhist teaching, traditionally given by the Buddha, Siddhartha Gautama, in his first sermon. They are: dukkha (suffering or unsatisfactoriness) exists; it has a cause; it can end; and there is a path to its end.","They frame Buddhism as a practical response to a human problem rather than a set of abstract claims. The cause is usually described as craving and attachment, and the ending of suffering is called nirvana. Traditions interpret details differently, but this structure is shared across Theravada, Mahayana and Vajrayana schools.","The fourth truth gives the method: the Noble Eightfold Path, grouped into wisdom (right view and intention), ethical conduct (right speech, action and livelihood) and mental discipline (right effort, mindfulness and concentration). Practice combines ethics, meditation and study, often within a teacher’s guidance or a community."],
+"The Five Pillars of Islam":["The Five Pillars are the core acts of worship in Islam: shahada (declaring faith in one God and Muhammad as His messenger), salat (five daily prayers), zakat (obligatory charity), sawm (fasting during Ramadan) and hajj (pilgrimage to Mecca).","For Muslims they give faith a visible, shared structure that links belief with discipline, gratitude and community. Zakat addresses care for the poor, fasting builds self-restraint and empathy, and hajj gathers Muslims from across the world in common rites.","Prayer is performed at set times of day facing the Kaaba in Mecca, after ritual washing. Zakat is commonly calculated as 2.5% of qualifying savings each year. Fasting means abstaining from food and drink from dawn to sunset through Ramadan, with exemptions for illness, travel and others. Hajj is required once in a lifetime for those who are physically and financially able."],
+"The Stoic dial":["Stoicism is an ancient Greek and Roman philosophy founded by Zeno of Citium around 300 BCE. Its central idea, the dichotomy of control, is that some things are up to us, such as our judgements, choices and actions, and others are not, such as other people’s opinions, health or luck.","Stoics argued that distress comes largely from how we judge events, not from the events alone. Directing effort at what we control brings steadiness. Marcus Aurelius, an emperor, and Epictetus, a former slave, both used it to face hardship and responsibility.","Practices include pausing to ask “is this up to me?”, imagining setbacks in advance, reviewing your day each evening, and acting with virtue (wisdom, courage, justice and self-control) whatever the outcome. It doesn’t mean suppressing feeling; it means choosing your response deliberately."],
+"Socrates wrote nothing":["Socrates (c. 470–399 BCE) was an Athenian philosopher who left no writings. Our picture of him comes mainly from Plato’s dialogues, along with Xenophon and the playwright Aristophanes, whose accounts do not always agree.","He shifted philosophy toward how people should live. He claimed to know only that he knew little, and showed that confident beliefs about justice or courage often fall apart under questioning. Athens tried him in 399 BCE for impiety and corrupting the young, and he was sentenced to death.","His method, the elenchus, is a conversation: he asks for a definition, tests it with examples and counter-examples, exposes contradictions, and invites a better definition. It still shapes teaching and critical thinking. Try it yourself: take one of your beliefs, ask “what exactly do I mean?”, and look for a case that breaks it."],
+"A river that flows north":["The Nile is about 6,650 km long and flows north to the Mediterranean through a basin shared by eleven countries. Its two main branches are the White Nile, from the Great Lakes region, and the Blue Nile, from Ethiopia’s highlands. They meet at Khartoum in Sudan.","In Egypt, where rain is scarce, the river made farming possible. The Blue Nile’s summer floods carried silt that renewed the soil, so ancient Egyptians built their calendar, taxes and religion around the flood. Today it supplies water and power to millions across the region.","It flows north because the land slopes that way: its sources lie at higher elevation in the south. The Aswan High Dam, completed in 1970, now controls the flood, storing water and producing electricity, though it also traps silt. Sharing the water, including around Ethiopia’s Grand Renaissance Dam, remains a major diplomatic issue."],
+"The green Sahara":["The African Humid Period was a time, from roughly 14,500 to 5,000 years ago, when the Sahara had grasslands, lakes and rivers. Rock paintings and fossils show hippos, crocodiles, cattle herders and fishers living where there is now sand.","It shows that climate can change dramatically within human history. When the rains faded, people moved toward the Nile Valley and other water sources, which many researchers link to the rise of early Egyptian civilisation. It also warns that regional climates can shift faster than we expect.","Slow wobbles in Earth’s axis changed how much summer sunlight the Northern Hemisphere received, strengthening the African monsoon and pushing rain far north. As that effect weakened, the monsoon retreated south, and the loss of vegetation reduced moisture further, speeding the return to desert."]
+};
+var DEF=function(){return{v:2,learned:[],saved:[],streak:0,last:"",rem:{on:false,mode:"daily",time:"19:00",fired:"",rd:"",rt:0}}};
+var S=DEF(),full=false,tab="learn",topic="All",cur=null,seen=[],answered=null,msg="",banner="",storeOK=true,remMsg="";
+function ints(a){return Array.isArray(a)?a.filter(function(x){return Number.isInteger(x)&&x>=0&&x<D.length}).filter(function(x,i,s){return s.indexOf(x)===i}):[]}
+function load(){try{var r=localStorage.getItem("margin2")||localStorage.getItem("margin1");if(r){var o=JSON.parse(r),d=DEF();
+ d.learned=ints(o.learned);d.saved=ints(o.saved);d.streak=Math.max(0,+o.streak||0);d.last=typeof o.last==="string"?o.last:"";
+ if(o.rem&&typeof o.rem==="object"){var m=o.rem;d.rem.on=!!m.on;d.rem.mode=m.mode==="random"?"random":"daily";if(/^\d\d:\d\d$/.test(m.time))d.rem.time=m.time;d.rem.fired=String(m.fired||"");d.rem.rd=String(m.rd||"");d.rem.rt=+m.rt||0}
+ S=d}}catch(e){S=DEF()}}
+function save(){try{localStorage.setItem("margin2",JSON.stringify(S))}catch(e){storeOK=false}}
+function day(d){return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function touch(){var n=new Date(),t=day(n),y=day(new Date(n-864e5));if(S.last===t)return;S.streak=S.last===y?S.streak+1:1;S.last=t}
+function pool(){var p=[];D.forEach(function(d,i){if(topic==="All"||d[0]===topic)p.push(i)});return p}
+function pick(){var p=pool(),c=p.filter(function(i){return seen.indexOf(i)<0});
+ if(!c.length){seen=[];c=p.filter(function(i){return i!==cur});if(!c.length)c=p}
+ var u=c.filter(function(i){return S.learned.indexOf(i)<0});if(u.length)c=u;
+ cur=c[Math.floor(Math.random()*c.length)];seen.push(cur);answered=null;msg="";full=false}
+function $(s){return document.querySelector(s)}
+function greet(){var h=new Date().getHours();return h<12?"Good morning.":h<18?"Good afternoon.":"Good evening."}
+function learn(){
+ if(cur===null||(topic!=="All"&&D[cur][0]!==topic))pick();
+ var d=D[cur],h='<p class="hand hi">'+greet()+'</p><p class="sub">'+(S.learned.length?"You’ve read "+S.learned.length+" of "+D.length+" pages so far.":"Here’s a first page to get you started.")+'</p>';
+ if(!storeOK)h+='<p class="warn">Your browser is blocking saving, so progress will be lost when you close this page.</p>';
+ if(banner)h+='<div class="banner"><span>'+banner+'</span><button class="link" data-x="banner">Dismiss</button></div>';
+ h+='<div class="chips" role="group" aria-label="Topics">';
+ ["All"].concat(T).forEach(function(t){h+='<button class="chip" aria-pressed="'+(t===topic)+'" data-topic="'+t+'">'+t+'</button>'});
+ h+='</div><article class="card"><p class="hand note">'+d[0]+(S.learned.indexOf(cur)>=0?", read before":"")+'</p><h2>'+d[1]+'</h2>';
+ if(full&&F[d[1]]){var f=F[d[1]];h+=['What it is','Why it matters','How it works'].map(function(t,i){return'<h3 class="sec">'+t+'</h3><p class="body">'+f[i]+'</p>'}).join('')+'<div class="row"><button class="btn" data-x="brief">Back to the quiz</button><button class="btn ghost" data-x="next">Another page</button></div></article>';return h}
+ h+='<p class="body">'+d[2]+'</p><p class="q">'+d[3]+'</p>';
+ d[4].forEach(function(o,i){var c="opt";if(answered){if(i===d[5])c+=" right";else if(i===answered.pick)c+=" wrong"}
+  h+='<button class="'+c+'" data-o="'+i+'"'+(answered?" disabled":"")+'>'+o+'</button>'});
+ h+='<p class="msg" aria-live="polite">'+msg+'</p><div class="row">'+(F[d[1]]?'<button class="btn" data-x="full">Study in full</button>':'')+'<button class="btn ghost" data-x="save">'+(S.saved.indexOf(cur)>=0?"Unsave":"Save for later")+'</button><button class="btn" data-x="next">Another page</button></div></article>';
+ return h}
+function saved(){var h='<p class="hand hi">Your saved pages</p><p class="sub">Things you wanted to come back to.</p>';
+ if(!S.saved.length)h+='<p>Nothing here yet. Tap “Save for later” on any page and it will wait for you.</p>';
+ S.saved.forEach(function(i){h+='<div class="item"><div><b>'+D[i][1]+'</b><small>'+D[i][0]+'</small></div><div><button class="link" data-open="'+i+'">Read</button><button class="link" data-rm="'+i+'">Remove</button></div></div>'});
+ return h}
+function perm(){return("Notification" in window)?Notification.permission:"unsupported"}
+function calLink(){var n=new Date(),t=S.rem.time.split(":"),p=function(x){return String(x).padStart(2,"0")};
+ var s=n.getFullYear()+p(n.getMonth()+1)+p(n.getDate())+"T"+t[0]+t[1]+"00";
+ return"https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent("Read one page on Margin")+"&details="+encodeURIComponent("Ten quiet minutes to learn something new.")+"&dates="+s+"/"+s+"&recur="+encodeURIComponent("RRULE:FREQ=DAILY")}
+function me(){var r=S.rem,pm=perm(),h='<p class="hand hi">You</p><p class="sub">Your reading so far.</p><div class="stats"><div><b>'+S.learned.length+'/'+D.length+'</b>pages read</div><div><b>'+S.streak+'</b>day streak</div></div>';
+ T.forEach(function(t){var all=D.filter(function(d){return d[0]===t}).length,got=S.learned.filter(function(i){return D[i][0]===t}).length;
+  h+='<div>'+t+' <small>'+got+' of '+all+'</small></div><div class="bar"><i style="width:'+got/all*100+'%"></i></div>'});
+ h+='<div class="panel"><h3>Gentle reminders</h3><label><input type="checkbox" id="ron"'+(r.on?" checked":"")+'> Remind me to read</label>';
+ h+='<div class="row"><button class="chip" aria-pressed="'+(r.mode==="daily")+'" data-mode="daily">Same time daily</button><button class="chip" aria-pressed="'+(r.mode==="random")+'" data-mode="random">Surprise me</button></div>';
+ if(r.mode==="daily")h+='<label>At <input type="time" id="rt" value="'+r.time+'"></label>';else h+='<p>You’ll get one nudge a day at a random time between 9am and 9pm.</p>';
+ h+='<div class="row"><button class="btn ghost" data-x="allow">'+(pm==="granted"?"Notifications allowed":"Allow notifications")+'</button><button class="btn ghost" data-x="test">Send a test</button></div>';
+ h+='<p aria-live="polite">'+(remMsg||(pm==="denied"?"Notifications are blocked for this page in your browser settings.":pm==="unsupported"?"This browser can’t show notifications here, so you’ll see a note inside the app instead.":""))+'</p>';
+ h+='<p>Honest note: a web page can only nudge you while it’s open in a tab or app. For a reminder that always arrives, add it to your calendar too.</p><div class="row"><a class="btn" target="_blank" rel="noopener" href="'+calLink()+'">Add a daily calendar reminder</a></div></div>';
+ h+='<button class="link" data-x="reset">Reset my progress</button>';return h}
+function render(){[].forEach.call(document.querySelectorAll("nav button"),function(b){b.dataset.t===tab?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current")});
+ try{$("#view").innerHTML=({learn:learn,saved:saved,me:me})[tab]()}catch(e){$("#view").innerHTML='<p>Something went wrong. Tap You, then Reset my progress, and try again.</p>';cur=null}}
+function fire(test){var u=D.filter(function(d,i){return S.learned.indexOf(i)<0}),d=u.length?u[Math.floor(Math.random()*u.length)]:D[Math.floor(Math.random()*D.length)],
+ body="Today’s page: "+d[1];remMsg="";
+ if(perm()==="granted"){try{var n=new Notification("Margin",{body:body});n.onclick=function(){window.focus();tab="learn";render();n.close()};if(test)remMsg="Sent. Check your notifications."}catch(e){remMsg="Your browser wouldn’t show a system notification, so here it is in the app."}}
+ else if(test)remMsg="Allow notifications first, or you’ll only see this note inside the app.";
+ banner=body;if(!test&&perm()!=="granted"){}render()}
+function tick(){var r=S.rem;if(!r.on)return;var n=new Date(),t=day(n),m=n.getHours()*60+n.getMinutes(),tg;
+ if(r.mode==="random"){if(r.rd!==t){r.rd=t;r.rt=540+Math.floor(Math.random()*720);save()}tg=r.rt}else{var p=r.time.split(":");tg=(+p[0])*60+(+p[1])}
+ if(r.fired!==t&&m>=tg){r.fired=t;save();fire(false)}}
+document.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var x=b.dataset.x;
+ if(b.dataset.t)tab=b.dataset.t;
+ else if(b.dataset.topic){topic=b.dataset.topic;cur=null;seen=[]}
+ else if(b.dataset.o!==undefined&&!answered){var p=+b.dataset.o,ok=p===D[cur][5];answered={pick:p};
+  if(S.learned.indexOf(cur)<0)S.learned.push(cur);touch();msg=ok?"Right. That page is now in your read list.":"Close. The answer is marked above, and this page still counts as read.";save()}
+ else if(x==="full"){full=true;window.scrollTo(0,0)}
+ else if(x==="brief"){full=false;window.scrollTo(0,0)}
+ else if(x==="next"){full=false;pick();window.scrollTo(0,0)}
+ else if(x==="save"){var k=S.saved.indexOf(cur);k<0?S.saved.push(cur):S.saved.splice(k,1);save()}
+ else if(x==="banner")banner="";
+ else if(b.dataset.open){cur=+b.dataset.open;topic="All";seen=[cur];answered=null;msg="";full=false;tab="learn"}
+ else if(b.dataset.rm){S.saved=S.saved.filter(function(i){return i!==+b.dataset.rm});save()}
+ else if(b.dataset.mode){S.rem.mode=b.dataset.mode;S.rem.fired="";save()}
+ else if(x==="allow"){try{var q=Notification.requestPermission(function(){render()});if(q&&q.then)q.then(function(){render()},function(){})}catch(er){remMsg="Notifications aren’t available in this browser."}}
+ else if(x==="test")fire(true);
+ else if(x==="reset"){if(confirm("Reset all progress and saved pages?")){var rm=S.rem;S=DEF();S.rem=rm;save()}}
+ else return;render()});
+document.addEventListener("change",function(e){var i=e.target;
+ if(i.id==="ron"){S.rem.on=i.checked;S.rem.fired="";save();if(i.checked&&perm()==="default"){try{Notification.requestPermission(function(){render()})}catch(er){}}tick();render()}
+ else if(i.id==="rt"&&/^\d\d:\d\d$/.test(i.value)){S.rem.time=i.value;S.rem.fired="";save();render()}});
+document.addEventListener("visibilitychange",function(){if(!document.hidden)tick()});
+window.addEventListener("focus",tick);
+load();render();tick();
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+setInterval(tick,30000);
+</script>
+</body>
+</html>
