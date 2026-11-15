@@ -65,15 +65,25 @@ nav button[aria-current=page]{color:var(--acc);font-weight:700;box-shadow:inset 
 .panel h3{margin:0 0 8px;font:700 1.1rem Georgia,serif}
 .panel label{display:flex;align-items:center;gap:8px;margin:8px 0}
 .panel input[type=time]{font:inherit;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.sbox{display:flex;gap:8px;margin-bottom:10px}.sbox input{flex:1;min-width:0;padding:11px 12px;font:inherit;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}.sbox .btn{flex:none;min-width:0}.item small{overflow-wrap:anywhere}
+.nat{display:block;font-size:1.5rem;line-height:1.35}.nat.big{font-size:2.2rem}.opt .nat{font-size:1.2rem}.opt small,.card small.rom,.bubble small{display:block;color:var(--mute);font-size:.88rem}.langcard{display:block;width:100%;text-align:left;cursor:pointer;margin-bottom:12px;color:var(--ink);font:inherit}.pc{margin-bottom:10px;padding:14px 16px}.bubble{background:var(--bg);border:1px solid var(--line);border-radius:12px 12px 12px 2px;padding:12px 14px;margin-bottom:14px}.ulinks{display:flex;flex-wrap:wrap;justify-content:flex-end}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.grid button{padding:10px 4px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer}.grid b{display:block;font-size:1.4rem}.grid small{display:block;color:var(--mute);font-size:.78rem}nav button{font-size:.82rem}
 </style>
 </head>
 <body>
 <header><div class="brand">Margin</div><div id="today"></div></header>
 <main id="view"></main>
-<nav><button data-t="read">Read</button><button data-t="saved">Saved</button><button data-t="me">You</button></nav>
+<nav><button data-t="read">Read</button><button data-t="search">Search</button><button data-t="lang">Languages</button><button data-t="saved">Saved</button><button data-t="me">You</button></nav>
 <script>
 var T=["History","Science","Religion","Philosophy","Geography"];
-var LT={"History":["ancient civilization","medieval empire","revolution","trade route","archaeological discovery","colonial era"],"Science":["physics concept","chemical element","cell biology","geology","scientific method","mathematical theorem"],"Religion":["world religion","religious festival","mythology","sacred text","monastic order"],"Philosophy":["philosophical school","ethical theory","formal logic","epistemology","political philosophy"],"Geography":["river","mountain range","island nation","desert","capital city","climate zone"],"Health":["nutrition","vaccine","human anatomy","sleep","mental health","infectious disease"],"Technology":["computer science","internet protocol","engineering invention","renewable energy","cryptography"],"Economics":["economic concept","central bank","trade policy","market structure","inflation"],"Arts":["painting movement","classical music","architecture style","literary genre","sculpture"],"Nature":["mammal","bird species","ecosystem","plant species","marine biology"],"Space":["planet","galaxy","space telescope","space mission","astronomy"],"Language":["language family","writing system","linguistics","etymology"]};
+var LT={"History":["ancient civilization","medieval empire","revolution","trade route","archaeological discovery","colonial era"],"Science":["physics concept","chemical element","cell biology","geology","scientific method","mathematical theorem"],"Religion":["world religion","religious festival","sacred text","monastic order"],"Philosophy":["philosophical school","ethical theory","formal logic","political philosophy"],"Geography":["river","mountain range","island nation","desert","capital city","climate zone"],"Health":["nutrition","vaccine","human anatomy","sleep","mental health","infectious disease"],"Technology":["internet protocol","engineering invention","cryptography","telecommunications"],"Economics":["economic concept","central bank","trade policy","inflation"],"Arts":["painting movement","architecture style","sculpture","museum"],"Nature":["ecosystem","bird species","mammal","marine biology"],"Space":["planet","galaxy","space telescope","space mission"],"Language":["language family","writing system","linguistics","etymology"],"Medicine":["surgery","medical history","disease","pharmacology"],"Psychology":["cognitive bias","child development","personality","learning theory"],"Society":["sociology","social movement","urbanization","migration"],"Politics":["political system","election","constitution","diplomacy"],"Law":["legal system","human rights","contract","court case"],"Business":["entrepreneurship","corporation","marketing","supply chain"],"Money":["personal finance","banking","currency","stock market"],"Mathematics":["geometry","probability","number theory","calculus"],"Engineering":["bridge","electrical engineering","aviation","materials science"],"Computing":["programming language","algorithm","artificial intelligence","operating system"],"Environment":["climate change","conservation","pollution","renewable energy"],"Weather":["storm","meteorology","monsoon","season"],"Oceans":["coral reef","ocean current","marine life","shipwreck"],"Animals":["reptile","insect","dinosaur","primate"],"Plants":["tree","flower","crop","botany"],"Food":["cuisine","fermentation","spice","agriculture"],"Sport":["olympic games","football","athletics","chess"],"Music":["musical instrument","jazz","folk music","composer"],"Film":["film director","animation","cinema history","documentary"],"Literature":["novel","poetry","playwright","ancient literature"],"Fashion":["textile","clothing","jewellery","design"],"Games":["board game","video game","puzzle","toy"],"Folklore":["fairy tale","folk tale","legend","nursery rhyme"],"Mythology":["greek mythology","african mythology","norse mythology","hindu mythology"],"People":["inventor","explorer","scientist","activist"],"Places":["city","national park","landmark","ancient ruins"],"Africa":["african history","west africa","african culture","african languages"],"Asia":["china","india","southeast asia","japan"],"Europe":["european history","european city","european culture"],"Americas":["south america","caribbean","indigenous peoples of the americas","north america"],"Transport":["railway","ship","automobile","aircraft"],"Education":["university","teaching method","school system","literacy"],"Festivals":["festival","carnival","holiday","ritual"],"Relationships":["marriage","family","friendship","romantic love"]};
+var MAT=[];
+var ADULT=/\b(sex|sexual|sexually|sexuality|porn\w*|erotic\w*|nude|nudity|fetish\w*|orgasm\w*|genital\w*|prostitut\w*|incest|rape|rapist|molest\w*|masturbat\w*|intercourse|aphrodisiac\w*|contracepti\w*|abortion|striptease|lingerie|kink\w*|bdsm|hentai|brothel\w*|sexy)\b/i;
+function adult(s){return ADULT.test(s||"")}
+function okT(t){return true}
+function pickTopics(n){var a=Object.keys(LT).filter(okT);for(var i=a.length-1;i>0;i--){var j=rnd(i+1),t=a[i];a[i]=a[j];a[j]=t}return a.slice(0,n)}
+function wk(){return S.simple?"https://simple.wikipedia.org":"https://en.wikipedia.org"}
+function libKey(){return"margin3lib"+(S.simple?"s":"")}
+function extra(pairs){return[getj(wk()+"/w/api.php?action=query&list=random&rnnamespace=0&rnlimit=10&format=json&origin=*").then(function(j){((j.query&&j.query.random)||[]).slice(0,4).forEach(function(r){pairs[r.title]="Anything"})}).catch(function(){})]}
 var D=[
 ["History","The Library of Alexandria","Founded in Egypt under the Ptolemies around the 3rd century BCE, it aimed to gather the world’s writings. Its decline was slow: funding cuts, politics and neglect over centuries mattered more than any single fire.","How did the library mostly decline?",["In one great fire","Gradually, over centuries","In an earthquake"],1],
 ["History","Mansa Musa’s pilgrimage","Mansa Musa ruled the Mali Empire, rich in gold and salt trade. His 1324 pilgrimage to Mecca, with an enormous caravan, spread so much gold around Cairo that prices there were disrupted for years.","Which empire did Mansa Musa rule?",["Songhai","Mali","Ghana"],1],
@@ -112,15 +122,204 @@ var F={
 "A river that flows north":["The Nile is about 6,650 km long and flows north to the Mediterranean through a basin shared by eleven countries. Its two main branches are the White Nile, from the Great Lakes region, and the Blue Nile, from Ethiopia’s highlands. They meet at Khartoum in Sudan.","In Egypt, where rain is scarce, the river made farming possible. The Blue Nile’s summer floods carried silt that renewed the soil, so ancient Egyptians built their calendar, taxes and religion around the flood. Today it supplies water and power to millions across the region.","It flows north because the land slopes that way: its sources lie at higher elevation in the south. The Aswan High Dam, completed in 1970, now controls the flood, storing water and producing electricity, though it also traps silt. Sharing the water, including around Ethiopia’s Grand Renaissance Dam, remains a major diplomatic issue."],
 "The green Sahara":["The African Humid Period was a time, from roughly 14,500 to 5,000 years ago, when the Sahara had grasslands, lakes and rivers. Rock paintings and fossils show hippos, crocodiles, cattle herders and fishers living where there is now sand.","It shows that climate can change dramatically within human history. When the rains faded, people moved toward the Nile Valley and other water sources, which many researchers link to the rise of early Egyptian civilisation. It also warns that regional climates can shift faster than we expect.","Slow wobbles in Earth’s axis changed how much summer sunlight the Northern Hemisphere received, strengthening the African monsoon and pushing rain far north. As that effect weakened, the monsoon retreated south, and the loss of vegetation reduced moisture further, speeding the return to desert."]
 };
-var DEF=function(){return{v:3,learned:[],saved:[],saved2:[],streak:0,last:"",total:0,td:{d:"",k:[]},mode:"live",rem:{on:false,mode:"daily",time:"19:00",fired:"",rd:"",rt:0}}};
+var DEF=function(){return{v:3,mature:true,simple:false,learned:[],saved:[],saved2:[],streak:0,last:"",total:0,td:{d:"",k:[]},mode:"live",rem:{on:false,mode:"daily",time:"19:00",fired:"",rd:"",rt:0}}};
 var S=DEF(),tab="read",topic="All",cur=null,seen=[],answered=null,msg="",banner="",storeOK=true,remMsg="",L=null,loading=false,err="",tok=0,full=false;
+var SQ="",SR=null,SL=false,SE="",stok=0;
+var LGD={
+zh:{n:"Mandarin Chinese",nat:"中文",v:"zh-CN",
+snd:{tones:[["妈","mā","1st tone: high and flat","mother"],["麻","má","2nd tone: rising, like asking “what?”","hemp"],["马","mǎ","3rd tone: dips down, then up","horse"],["骂","mà","4th tone: sharp and falling","to scold"]],tips:["The neutral tone is short and light, like the second syllable of 妈妈 (māma).","In pinyin, q sounds like “ch” in cheese, x like a soft “sh”, zh like “j”, and c like “ts”.","Tones change the meaning of a word, so practise them with the Listen buttons."]},
+units:[
+{t:"Greetings and introductions",tip:"Nǐ hǎo works with anyone. With elders or in formal settings, use the more respectful 您好 (nín hǎo).",
+p:[["你好","nǐ hǎo","Hello"],["您好","nín hǎo","Hello (respectful)"],["你好吗？","nǐ hǎo ma?","How are you?"],["我很好，谢谢","wǒ hěn hǎo, xièxie","I’m fine, thank you"],["我叫……","wǒ jiào …","My name is …"],["很高兴认识你","hěn gāoxìng rènshi nǐ","Nice to meet you"]],
+d:[[["你好！你叫什么名字？","nǐ hǎo! nǐ jiào shénme míngzi?","Hello! What’s your name?"],[["我叫Anna。","wǒ jiào Anna.","My name is Anna.",1],["我很好，谢谢。","wǒ hěn hǎo, xièxie.","I’m fine, thank you.",0],["再见！","zàijiàn!","Goodbye!",0]]],
+[["很高兴认识你！","hěn gāoxìng rènshi nǐ!","Nice to meet you!"],[["我也很高兴认识你。","wǒ yě hěn gāoxìng rènshi nǐ.","Nice to meet you too.",1],["不客气。","bú kèqi.","You’re welcome.",0],["对不起。","duìbuqǐ.","Sorry.",0]]]]},
+{t:"Eating out",tip:"Call the server with 服务员 (fúwùyuán). Tipping isn’t expected in mainland China.",
+p:[["请给我菜单","qǐng gěi wǒ càidān","Could I have the menu, please?"],["我要这个","wǒ yào zhège","I’ll have this one"],["我想喝茶","wǒ xiǎng hē chá","I’d like some tea"],["不要辣","bú yào là","No spicy, please"],["很好吃","hěn hǎochī","Delicious"],["买单","mǎidān","The bill, please"]],
+d:[[["你想吃什么？","nǐ xiǎng chī shénme?","What would you like to eat?"],[["我要这个。","wǒ yào zhège.","I’ll have this one.",1],["买单。","mǎidān.","The bill, please.",0],["再见。","zàijiàn.","Goodbye.",0]]],
+[["要辣的吗？","yào là de ma?","Would you like it spicy?"],[["不要辣，谢谢。","bú yào là, xièxie.","No spicy, thank you.",1],["很好吃。","hěn hǎochī.","Delicious.",0],["我叫Anna。","wǒ jiào Anna.","My name is Anna.",0]]]]},
+{t:"Getting around",tip:"Start with 请问 (qǐng wèn), “excuse me, may I ask”, before any question to a stranger.",
+p:[["请问，地铁站在哪里？","qǐng wèn, dìtiězhàn zài nǎlǐ?","Excuse me, where is the subway station?"],["我要去机场","wǒ yào qù jīchǎng","I’m going to the airport"],["一直走","yìzhí zǒu","Go straight"],["左转","zuǒ zhuǎn","Turn left"],["右转","yòu zhuǎn","Turn right"],["远吗？","yuǎn ma?","Is it far?"]],
+d:[[["你好，需要帮忙吗？","nǐ hǎo, xūyào bāngmáng ma?","Hello, do you need help?"],[["请问，地铁站在哪里？","qǐng wèn, dìtiězhàn zài nǎlǐ?","Excuse me, where is the subway station?",1],["我要这个。","wǒ yào zhège.","I’ll have this one.",0],["买单。","mǎidān.","The bill, please.",0]]],
+[["一直走，然后左转。","yìzhí zǒu, ránhòu zuǒ zhuǎn.","Go straight, then turn left."],[["谢谢你！","xièxie nǐ!","Thank you!",1],["我要这个。","wǒ yào zhège.","I’ll have this one.",0],["你好吗？","nǐ hǎo ma?","How are you?",0]]]]},
+{t:"Shopping and numbers",tip:"Bargaining is normal in markets but not in shops. Most people pay by phone with WeChat Pay or Alipay.",
+p:[["多少钱？","duōshao qián?","How much is it?"],["太贵了","tài guì le","Too expensive"],["能便宜一点吗？","néng piányi yìdiǎn ma?","Can it be a bit cheaper?"],["我只是看看","wǒ zhǐshì kànkan","I’m just looking"],["可以用手机支付吗？","kěyǐ yòng shǒujī zhīfù ma?","Can I pay by phone?"],["一二三四五六七八九十","yī èr sān sì wǔ liù qī bā jiǔ shí","One to ten"]],
+d:[[["你好，这个五十块。","nǐ hǎo, zhège wǔshí kuài.","Hello, this one is 50 yuan."],[["能便宜一点吗？","néng piányi yìdiǎn ma?","Can it be a bit cheaper?",1],["我叫Anna。","wǒ jiào Anna.","My name is Anna.",0],["左转。","zuǒ zhuǎn.","Turn left.",0]]],
+[["好的，四十五块。","hǎo de, sìshíwǔ kuài.","OK, 45 yuan."],[["可以用手机支付吗？","kěyǐ yòng shǒujī zhīfù ma?","Can I pay by phone?",1],["请给我菜单。","qǐng gěi wǒ càidān.","Could I have the menu?",0],["一直走。","yìzhí zǒu.","Go straight.",0]]]]},
+{t:"Small talk and new friends",tip:"Locals are usually delighted when a visitor speaks Chinese, so don’t worry about perfect tones.",
+p:[["你是哪国人？","nǐ shì nǎ guó rén?","Which country are you from?"],["我是……人","wǒ shì … rén","I’m from … (country)"],["你会说英语吗？","nǐ huì shuō Yīngyǔ ma?","Do you speak English?"],["我在学中文","wǒ zài xué Zhōngwén","I’m learning Chinese"],["请再说一遍","qǐng zài shuō yí biàn","Please say that again"],["再见","zàijiàn","Goodbye"]],
+d:[[["你的中文很好！","nǐ de Zhōngwén hěn hǎo!","Your Chinese is great!"],[["谢谢，我在学中文。","xièxie, wǒ zài xué Zhōngwén.","Thanks, I’m learning Chinese.",1],["买单。","mǎidān.","The bill, please.",0],["太贵了。","tài guì le.","Too expensive.",0]]],
+[["你听得懂吗？","nǐ tīng de dǒng ma?","Can you understand?"],[["请再说一遍，谢谢。","qǐng zài shuō yí biàn, xièxie.","Please say that again, thanks.",1],["我只是看看。","wǒ zhǐshì kànkan.","I’m just looking.",0],["右转。","yòu zhuǎn.","Turn right.",0]]]]}
+]},
+ko:{n:"Korean",nat:"한국어",v:"ko-KR",
+snd:{c:[["ㄱ","g / k","가"],["ㄴ","n","나"],["ㄷ","d / t","다"],["ㄹ","r / l","라"],["ㅁ","m","마"],["ㅂ","b / p","바"],["ㅅ","s","사"],["ㅇ","silent / ng","아"],["ㅈ","j","자"],["ㅊ","ch","차"],["ㅋ","k","카"],["ㅌ","t","타"],["ㅍ","p","파"],["ㅎ","h","하"]],v:[["ㅏ","a","아"],["ㅓ","eo","어"],["ㅗ","o","오"],["ㅜ","u","우"],["ㅡ","eu","으"],["ㅣ","i","이"],["ㅐ","ae","애"],["ㅔ","e","에"],["ㅑ","ya","야"],["ㅕ","yeo","여"],["ㅛ","yo","요"],["ㅠ","yu","유"]],tips:["Hangul is built from blocks: a consonant plus a vowel, like 가 (ga) or 나 (na).","ㅇ at the start of a block is silent. At the end of a block it sounds like “ng”.","Tap any letter to hear it as a syllable."]},
+units:[
+{t:"Greetings and introductions",tip:"A small bow goes with greetings. With strangers and elders, use the polite endings (-yo and -seumnida).",
+p:[["안녕하세요","annyeonghaseyo","Hello"],["안녕히 계세요","annyeonghi gyeseyo","Goodbye (to someone staying)"],["감사합니다","gamsahamnida","Thank you"],["죄송합니다","joesonghamnida","I’m sorry"],["제 이름은 …예요","je ireumeun … yeyo","My name is …"],["만나서 반갑습니다","mannaseo bangapseumnida","Nice to meet you"]],
+d:[[["안녕하세요! 이름이 뭐예요?","annyeonghaseyo! ireumi mwoyeyo?","Hello! What’s your name?"],[["제 이름은 Anna예요.","je ireumeun Anna-yeyo.","My name is Anna.",1],["감사합니다.","gamsahamnida.","Thank you.",0],["안녕히 계세요.","annyeonghi gyeseyo.","Goodbye.",0]]],
+[["만나서 반갑습니다!","mannaseo bangapseumnida!","Nice to meet you!"],[["저도 반갑습니다.","jeodo bangapseumnida.","Nice to meet you too.",1],["죄송합니다.","joesonghamnida.","I’m sorry.",0],["얼마예요?","eolmayeyo?","How much is it?",0]]]]},
+{t:"Eating out",tip:"Call staff with 저기요 (jeogiyo). Water is usually free, and tipping isn’t expected.",
+p:[["메뉴판 주세요","menyupan juseyo","Menu, please"],["이거 주세요","igeo juseyo","This one, please"],["물 주세요","mul juseyo","Water, please"],["안 맵게 해 주세요","an maepge hae juseyo","Not spicy, please"],["맛있어요","masisseoyo","It’s delicious"],["계산해 주세요","gyesanhae juseyo","The bill, please"]],
+d:[[["어서 오세요! 뭐 드릴까요?","eoseo oseyo! mwo deurilkkayo?","Welcome! What can I get you?"],[["이거 주세요.","igeo juseyo.","This one, please.",1],["안녕히 계세요.","annyeonghi gyeseyo.","Goodbye.",0],["죄송합니다.","joesonghamnida.","I’m sorry.",0]]],
+[["맵게 해 드릴까요?","maepge hae deurilkkayo?","Shall I make it spicy?"],[["안 맵게 해 주세요.","an maepge hae juseyo.","Not spicy, please.",1],["물 주세요.","mul juseyo.","Water, please.",0],["만나서 반갑습니다.","mannaseo bangapseumnida.","Nice to meet you.",0]]]]},
+{t:"Getting around",tip:"Subways and buses use a T-money card. Naver Map and Kakao Map work better in Korea than Google Maps.",
+p:[["지하철역이 어디예요?","jihacheolyeogi eodiyeyo?","Where is the subway station?"],["공항에 가고 싶어요","gonghange gago sipeoyo","I want to go to the airport"],["직진하세요","jikjinhaseyo","Go straight"],["왼쪽","oenjjok","Left"],["오른쪽","oreunjjok","Right"],["멀어요?","meoreoyo?","Is it far?"]],
+d:[[["도와 드릴까요?","dowa deurilkkayo?","Can I help you?"],[["지하철역이 어디예요?","jihacheolyeogi eodiyeyo?","Where is the subway station?",1],["이거 주세요.","igeo juseyo.","This one, please.",0],["맛있어요.","masisseoyo.","It’s delicious.",0]]],
+[["직진해서 왼쪽으로 가세요.","jikjinhaeseo oenjjogeuro gaseyo.","Go straight and turn left."],[["감사합니다!","gamsahamnida!","Thank you!",1],["계산해 주세요.","gyesanhae juseyo.","The bill, please.",0],["안 맵게 해 주세요.","an maepge hae juseyo.","Not spicy, please.",0]]]]},
+{t:"Shopping and numbers",tip:"Prices use Sino-Korean numbers (일, 이, 삼). Counting objects uses native numbers (하나, 둘, 셋).",
+p:[["얼마예요?","eolmayeyo?","How much is it?"],["너무 비싸요","neomu bissayo","It’s too expensive"],["좀 깎아 주세요","jom kkakka juseyo","Please give me a discount"],["그냥 구경하는 거예요","geunyang gugyeonghaneun geoyeyo","I’m just looking"],["카드로 계산할게요","kadeuro gyesanhalgeyo","I’ll pay by card"],["일 이 삼 사 오","il i sam sa o","One to five (for prices)"]],
+d:[[["어서 오세요. 이거 오만 원이에요.","eoseo oseyo. igeo oman wonieyo.","Welcome. This is 50,000 won."],[["좀 깎아 주세요.","jom kkakka juseyo.","Please give me a discount.",1],["만나서 반갑습니다.","mannaseo bangapseumnida.","Nice to meet you.",0],["지하철역이 어디예요?","jihacheolyeogi eodiyeyo?","Where is the subway station?",0]]],
+[["사만 오천 원에 드릴게요.","saman ocheon wone deurilgeyo.","I’ll give it to you for 45,000 won."],[["카드로 계산할게요.","kadeuro gyesanhalgeyo.","I’ll pay by card.",1],["왼쪽.","oenjjok.","Left.",0],["맛있어요.","masisseoyo.","It’s delicious.",0]]]]},
+{t:"Small talk and new friends",tip:"Koreans sometimes ask your age to choose the right level of politeness. It’s normal, not rude.",
+p:[["어느 나라에서 왔어요?","eoneu naraeseo wasseoyo?","Which country are you from?"],["저는 …에서 왔어요","jeoneun … eseo wasseoyo","I’m from … (country)"],["영어 하세요?","yeongeo haseyo?","Do you speak English?"],["한국어를 공부하고 있어요","hangugeoreul gongbuhago isseoyo","I’m studying Korean"],["다시 한번 말해 주세요","dasi hanbeon malhae juseyo","Please say that once more"],["잘 가요","jal gayo","Goodbye (to someone leaving)"]],
+d:[[["한국어를 잘하시네요!","hangugeoreul jalhasineyo!","You speak Korean well!"],[["감사합니다. 한국어를 공부하고 있어요.","gamsahamnida. hangugeoreul gongbuhago isseoyo.","Thank you. I’m studying Korean.",1],["얼마예요?","eolmayeyo?","How much is it?",0],["직진하세요.","jikjinhaseyo.","Go straight.",0]]],
+[["어느 나라에서 왔어요?","eoneu naraeseo wasseoyo?","Which country are you from?"],[["저는 캐나다에서 왔어요.","jeoneun kaenadaeseo wasseoyo.","I’m from Canada.",1],["이거 주세요.","igeo juseyo.","This one, please.",0],["오른쪽.","oreunjjok.","Right.",0]]]]}
+]}};
+["Chinese verbs never change form. Add 吗 (ma) to the end of a statement to make a yes/no question: 你好 becomes 你好吗？ To give your name, say 我叫 plus the name.","To order, say 我要 (wǒ yào, I want) or the softer 我想 (wǒ xiǎng, I’d like). 不要 (bú yào) means “don’t want”, which is how you say “no spicy”: 不要辣.","Directions are short commands: 左转 and 右转 for turns, 一直走 for straight. Use 在哪里 (zài nǎlǐ) for “where is…?”, and 吗 for yes/no questions like 远吗？","Numbers 1 to 10 unlock prices: 十一 is 11, 二十 is 20 and 五十 is 50. The everyday word for yuan is 块 (kuài).","Ask 你会…吗 (nǐ huì … ma) to find out if someone can do something. Put 在 (zài) before a verb for an ongoing action: 我在学中文 means “I’m learning Chinese”."].forEach(function(g,i){LGD.zh.units[i].g=g});
+["Korean has polite speech built in. The -요 and -습니다 endings are safe with strangers and elders. Verbs go at the end of the sentence.","Add 주세요 (juseyo, “please give me”) after what you want: 물 주세요 is “water, please”. 이거 (igeo) means “this”.","Put the place before 어디예요 (eodiyeyo, “where is”): 지하철역이 어디예요? Directions such as 직진하세요 end in -세요, a polite command.","Prices use Sino-Korean numbers plus 원 (won): 오천 원 is 5,000 won. 얼마예요 asks “how much?”","에서 (eseo) after a place means “from”: 캐나다에서 왔어요 is “I came from Canada”. -고 있어요 shows an ongoing action, as in “I’m studying”."].forEach(function(g,i){LGD.ko.units[i].g=g});
+LGD.zh.units.push(
+{t:"Family and friends",tip:"Chinese family words are very specific: 爷爷 is your father’s father and 外公 is your mother’s father. It shows how central family is.",g:"Add 的 (de) to show ownership: 我的朋友 is “my friend”. With close family, 的 is often dropped: 我妈妈, “my mum”. Use 有 (yǒu) for “have”.",
+p:[["这是我的家人","zhè shì wǒ de jiārén","This is my family"],["我有一个哥哥","wǒ yǒu yí ge gēge","I have an older brother"],["她是我的朋友","tā shì wǒ de péngyou","She is my friend"],["你有孩子吗？","nǐ yǒu háizi ma?","Do you have children?"],["我妈妈、我爸爸","wǒ māma, wǒ bàba","My mum, my dad"],["你家有几口人？","nǐ jiā yǒu jǐ kǒu rén?","How many people are in your family?"]],
+d:[[["这是你的家人吗？","zhè shì nǐ de jiārén ma?","Is this your family?"],[["对，这是我妈妈。","duì, zhè shì wǒ māma.","Yes, this is my mum.",1],["太贵了。","tài guì le.","Too expensive.",0],["左转。","zuǒ zhuǎn.","Turn left.",0]]],
+[["你有孩子吗？","nǐ yǒu háizi ma?","Do you have children?"],[["没有，我有一个哥哥。","méiyǒu, wǒ yǒu yí ge gēge.","No, I have an older brother.",1],["买单。","mǎidān.","The bill, please.",0],["一直走。","yìzhí zǒu.","Go straight.",0]]]]},
+{t:"Time and days",tip:"Chinese puts time words before the verb. Days of the week are numbered: Monday is 星期一, literally “week one”.",g:"Say the time with 点 (diǎn): 三点 is 3 o’clock, and 半 (bàn) means half past: 三点半. Days are 星期 plus a number, from 星期一 to 星期六. Sunday is 星期天.",
+p:[["现在几点？","xiànzài jǐ diǎn?","What time is it now?"],["现在三点半","xiànzài sān diǎn bàn","It’s half past three"],["今天星期几？","jīntiān xīngqī jǐ?","What day is it today?"],["今天星期一","jīntiān xīngqīyī","Today is Monday"],["明天见","míngtiān jiàn","See you tomorrow"],["我们几点见面？","wǒmen jǐ diǎn jiànmiàn?","What time shall we meet?"]],
+d:[[["我们明天见面，好吗？","wǒmen míngtiān jiànmiàn, hǎo ma?","Shall we meet tomorrow?"],[["好的，我们几点见面？","hǎo de, wǒmen jǐ diǎn jiànmiàn?","Sure, what time shall we meet?",1],["现在三点半。","xiànzài sān diǎn bàn.","It’s half past three.",0],["我有一个哥哥。","wǒ yǒu yí ge gēge.","I have an older brother.",0]]],
+[["下午三点半，可以吗？","xiàwǔ sān diǎn bàn, kěyǐ ma?","3:30 in the afternoon, is that OK?"],[["可以，明天见！","kěyǐ, míngtiān jiàn!","OK, see you tomorrow!",1],["今天星期一。","jīntiān xīngqīyī.","Today is Monday.",0],["太贵了。","tài guì le.","Too expensive.",0]]]]},
+{t:"At the hotel",tip:"Keep your passport handy. Hotels in China register every foreign guest and will ask for it at check-in.",g:"有 (yǒu) means both “to have” and “there is”. 有房间吗？ asks “Do you have a room?”. Its opposite is 没有 (méiyǒu). 几 (jǐ) asks “how many”, as in 几晚.",
+p:[["我有预订","wǒ yǒu yùdìng","I have a reservation"],["有房间吗？","yǒu fángjiān ma?","Do you have a room?"],["我要住两晚","wǒ yào zhù liǎng wǎn","I’ll stay two nights"],["无线网密码是什么？","wúxiànwǎng mìmǎ shì shénme?","What’s the Wi-Fi password?"],["几点退房？","jǐ diǎn tuìfáng?","What time is check-out?"],["这是我的护照","zhè shì wǒ de hùzhào","This is my passport"]],
+d:[[["你好，请问有预订吗？","nǐ hǎo, qǐng wèn yǒu yùdìng ma?","Hello, do you have a reservation?"],[["有，这是我的护照。","yǒu, zhè shì wǒ de hùzhào.","Yes, here is my passport.",1],["太贵了。","tài guì le.","Too expensive.",0],["再见。","zàijiàn.","Goodbye.",0]]],
+[["你住几晚？","nǐ zhù jǐ wǎn?","How many nights are you staying?"],[["我要住两晚。","wǒ yào zhù liǎng wǎn.","I’ll stay two nights.",1],["我想喝茶。","wǒ xiǎng hē chá.","I’d like some tea.",0],["左转。","zuǒ zhuǎn.","Turn left.",0]]]]},
+{t:"Health and help",tip:"In China, the emergency numbers are 110 for police, 119 for fire and 120 for an ambulance. A pharmacy is 药店 (yàodiàn).",g:"To say something hurts, use the body part plus 疼 (téng): 我头疼, “I have a headache”. 需要 (xūyào) means “need”: 我需要医生. Add 请 (qǐng) to be polite.",
+p:[["我不舒服","wǒ bù shūfu","I don’t feel well"],["我头疼","wǒ tóu téng","I have a headache"],["我需要医生","wǒ xūyào yīshēng","I need a doctor"],["药店在哪里？","yàodiàn zài nǎlǐ?","Where is the pharmacy?"],["请帮帮我","qǐng bāngbang wǒ","Please help me"],["请叫救护车","qǐng jiào jiùhùchē","Please call an ambulance"]],
+d:[[["你怎么了？","nǐ zěnme le?","What’s wrong?"],[["我不舒服，我头疼。","wǒ bù shūfu, wǒ tóu téng.","I don’t feel well, I have a headache.",1],["很好吃。","hěn hǎochī.","Delicious.",0],["明天见。","míngtiān jiàn.","See you tomorrow.",0]]],
+[["你需要医生吗？","nǐ xūyào yīshēng ma?","Do you need a doctor?"],[["是的，请帮帮我。","shì de, qǐng bāngbang wǒ.","Yes, please help me.",1],["我要这个。","wǒ yào zhège.","I’ll have this one.",0],["太贵了。","tài guì le.","Too expensive.",0]]]]}
+);
+LGD.ko.units.push(
+{t:"Family and friends",tip:"Korean family words depend on who is speaking: a man calls his older brother 형 (hyeong), while a woman says 오빠 (oppa) for an older brother and 언니 (eonni) for an older sister.",g:"은/는 marks the topic: 저는… means “As for me…”. 이에요 / 예요 means “is”. 있어요 (isseoyo) means “have / there is”, so 형이 있어요 is “I have an older brother”.",
+p:[["이 사람은 제 친구예요","i sarameun je chinguyeyo","This person is my friend"],["가족이 몇 명이에요?","gajogi myeot myeongieyo?","How many people are in your family?"],["형이 있어요","hyeongi isseoyo","I have an older brother (said by a man)"],["언니가 있어요","eonniga isseoyo","I have an older sister (said by a woman)"],["아이가 있어요?","aiga isseoyo?","Do you have children?"],["어머니와 아버지","eomeoniwa abeoji","Mother and father"]],
+d:[[["이 사람은 누구예요?","i sarameun nuguyeyo?","Who is this person?"],[["제 친구예요.","je chinguyeyo.","It’s my friend.",1],["감사합니다.","gamsahamnida.","Thank you.",0],["직진하세요.","jikjinhaseyo.","Go straight.",0]]],
+[["아이가 있어요?","aiga isseoyo?","Do you have children?"],[["아니요, 형이 있어요.","aniyo, hyeongi isseoyo.","No, I have an older brother.",1],["맛있어요.","masisseoyo.","It’s delicious.",0],["얼마예요?","eolmayeyo?","How much is it?",0]]]]},
+{t:"Time and days",tip:"Koreans use two number systems for time: native numbers for hours (한 시, 두 시, 세 시) and Sino-Korean numbers for minutes (오 분, 삼십 분).",g:"Hours use native numbers plus 시: 세 시 is 3 o’clock. Minutes use Sino-Korean numbers plus 분, or 반 (ban) for “half”: 세 시 반. Days end in 요일, as in 월요일 (Monday).",
+p:[["지금 몇 시예요?","jigeum myeot siyeyo?","What time is it now?"],["세 시 반이에요","se si banieyo","It’s half past three"],["오늘 무슨 요일이에요?","oneul museun yoirieyo?","What day is it today?"],["오늘은 월요일이에요","oneureun woryoirieyo","Today is Monday"],["내일 봐요","naeil bwayo","See you tomorrow"],["몇 시에 만날까요?","myeot sie mannalkkayo?","What time shall we meet?"]],
+d:[[["내일 만날까요?","naeil mannalkkayo?","Shall we meet tomorrow?"],[["좋아요. 몇 시에 만날까요?","joayo. myeot sie mannalkkayo?","Sounds good. What time shall we meet?",1],["세 시 반이에요.","se si banieyo.","It’s half past three.",0],["오늘은 월요일이에요.","oneureun woryoirieyo.","Today is Monday.",0]]],
+[["오후 세 시 반 어때요?","ohu se si ban eottaeyo?","How about 3:30 in the afternoon?"],[["좋아요. 내일 봐요!","joayo. naeil bwayo!","Sounds good. See you tomorrow!",1],["얼마예요?","eolmayeyo?","How much is it?",0],["왼쪽.","oenjjok.","Left.",0]]]]},
+{t:"At the hotel",tip:"Have your passport ready at check-in. Many guesthouses also offer traditional hanok rooms with floor beds.",g:"있어요 (isseoyo) means “there is / I have” and 없어요 (eopseoyo) means “there isn’t”. 방 있어요? asks “Do you have a room?”. -았/었어요 puts a verb in the past: 예약했어요, “I booked”.",
+p:[["예약했어요","yeyakhaesseoyo","I have a reservation"],["방 있어요?","bang isseoyo?","Do you have a room?"],["이틀 묵을 거예요","iteul mugeul geoyeyo","I’ll stay two nights"],["와이파이 비밀번호가 뭐예요?","waipai bimilbeonhoga mwoyeyo?","What’s the Wi-Fi password?"],["체크아웃은 몇 시예요?","chekeuauseun myeot siyeyo?","What time is check-out?"],["여기 제 여권이에요","yeogi je yeogwonieyo","Here is my passport"]],
+d:[[["어서 오세요. 예약하셨어요?","eoseo oseyo. yeyakhasyeosseoyo?","Welcome. Do you have a reservation?"],[["네, 예약했어요. 여기 제 여권이에요.","ne, yeyakhaesseoyo. yeogi je yeogwonieyo.","Yes, I booked. Here is my passport.",1],["좀 깎아 주세요.","jom kkakka juseyo.","Please give me a discount.",0],["잘 가요.","jal gayo.","Goodbye.",0]]],
+[["며칠 묵으세요?","myeochil mugeuseyo?","How many days will you stay?"],[["이틀 묵을 거예요.","iteul mugeul geoyeyo.","I’ll stay two nights.",1],["물 주세요.","mul juseyo.","Water, please.",0],["오른쪽.","oreunjjok.","Right.",0]]]]},
+{t:"Health and help",tip:"In Korea, the emergency numbers are 119 for fire and ambulance and 112 for police. Pharmacies (약국, yakguk) are easy to find.",g:"To say something hurts, use the body part plus 아파요 (apayo): 머리가 아파요, “my head hurts”. 필요해요 (piryohaeyo) means “I need”. 주세요 and -아/어 주세요 make polite requests.",
+p:[["몸이 안 좋아요","momi an joayo","I don’t feel well"],["머리가 아파요","meoriga apayo","I have a headache"],["의사가 필요해요","uisaga piryohaeyo","I need a doctor"],["약국이 어디예요?","yakgugi eodiyeyo?","Where is the pharmacy?"],["도와주세요","dowajuseyo","Please help me"],["구급차를 불러 주세요","gugeupchareul bulleo juseyo","Please call an ambulance"]],
+d:[[["괜찮으세요?","gwaenchanuseyo?","Are you OK?"],[["몸이 안 좋아요. 머리가 아파요.","momi an joayo. meoriga apayo.","I don’t feel well. I have a headache.",1],["맛있어요.","masisseoyo.","It’s delicious.",0],["내일 봐요.","naeil bwayo.","See you tomorrow.",0]]],
+[["의사가 필요해요?","uisaga piryohaeyo?","Do you need a doctor?"],[["네, 도와주세요.","ne, dowajuseyo.","Yes, please help me.",1],["이거 주세요.","igeo juseyo.","This one, please.",0],["계산해 주세요.","gyesanhae juseyo.","The bill, please.",0]]]]}
+);
+var LP={zh:{c:{}},ko:{c:{}}},lg=null,lv="home",lu=0,qz=null,rv=null,tk=null,INT=[0,0.01,1,3,7,14,30];
+function loadLP(){try{var o=JSON.parse(localStorage.getItem("margin3lang")||"{}");["zh","ko"].forEach(function(l){var c=o[l]&&o[l].c;if(c&&typeof c==="object")Object.keys(c).forEach(function(k){var v=c[k];if(/^\d+_\d+$/.test(k)&&Array.isArray(v)&&v.length===2&&+v[0]>=1&&+v[0]<=6&&isFinite(+v[1]))LP[l].c[k]=[+v[0],+v[1]]})})}catch(e){}}
+function saveLP(){try{localStorage.setItem("margin3lang",JSON.stringify(LP))}catch(e){}}
+function shf(){return Math.random()-.5}
+function okc(l,k){var a=k.split("_"),U=LGD[l].units[+a[0]];return!!(U&&U.p[+a[1]])}
+function grade(l,u,i,ok){var k=u+"_"+i,c=LP[l].c[k]||[0,0],b=ok?Math.min(6,Math.max(1,c[0])+1):1;LP[l].c[k]=[b,Date.now()+INT[b]*864e5];saveLP()}
+function due(l){var n=Date.now();return Object.keys(LP[l].c).filter(function(k){return okc(l,k)&&LP[l].c[k][1]<=n}).map(function(k){var a=k.split("_");return[+a[0],+a[1]]})}
+var VO=[];function loadVoices(){try{VO=speechSynthesis.getVoices()||[]}catch(e){VO=[]}}
+if("speechSynthesis" in window){loadVoices();try{speechSynthesis.onvoiceschanged=function(){loadVoices();if(tab==="lang")render()}}catch(e){}}
+function voiceFor(l){var ks=l==="zh"?["zh","cmn"]:["ko"],c=LGD[l].v.toLowerCase(),f=function(x){return x.lang.toLowerCase().replace("_","-")},v=VO.filter(function(x){return f(x)===c})[0];if(v)return v;return VO.filter(function(x){var a=f(x);return ks.some(function(k){return a.indexOf(k)===0})})[0]||null}
+function say(t,l){try{if(!("speechSynthesis" in window))return false;var u=new SpeechSynthesisUtterance(t.replace(/…/g,""));u.lang=LGD[l].v;var v=voiceFor(l);if(v)u.voice=v;u.rate=.8;speechSynthesis.cancel();speechSynthesis.resume();speechSynthesis.speak(u);return true}catch(e){return false}}
+function lb(a,l,extra,txt,cls){return'<button class="'+(cls||"link")+'" data-lg="'+a+'" data-l="'+l+'"'+(extra||"")+'>'+txt+'</button>'}
+function listen(l,t){return'<button class="link" data-lg="say" data-l="'+l+'" data-s="'+esc(t)+'">Listen</button>'}
+function nat(l,t){return'<span class="nat" lang="'+LGD[l].v+'">'+esc(t)+'</span>'}
+function aud(){var m,l=lg||"zh";if(!("speechSynthesis" in window))m="Audio isn’t supported in this browser. Try Chrome on your phone.";else if(VO.length&&lg&&!voiceFor(lg))m="No "+LGD[lg].n+" voice is installed on this device. On Android, open Settings, then Text-to-speech output, and install the voice data. On iPhone, open Settings, Accessibility, Spoken Content, Voices.";else m="Audio uses your phone’s own voice. Tap Test audio to check it.";return'<p class="muted">'+m+'</p><div class="row"><button class="btn ghost" data-lg="say" data-l="'+l+'" data-s="'+(l==="ko"?"안녕하세요":"你好")+'">Test audio</button></div>'}
+function startQuiz(l,u){var U=LGD[l].units[u],all=[];LGD[l].units.forEach(function(x,uu){x.p.forEach(function(p,j){all.push([uu,j])})});
+ var tts=("speechSynthesis" in window)&&(!VO.length||!!voiceFor(l)),qs=U.p.map(function(p,j){return j}).sort(shf).map(function(j,n){var d=all.filter(function(a){return!(a[0]===u&&a[1]===j)}).sort(shf).slice(0,2);return{j:j,t:tts?n%2:1,o:[[u,j]].concat(d).sort(shf)}});
+ qz={l:l,u:u,qs:qs,n:0,score:0,pick:null};lv="quiz";lu=u}
+function startReview(l){rv={l:l,list:due(l).sort(shf),n:0,show:false};lv="review"}
+function lgAct(b){var a=b.dataset.lg,l=b.dataset.l||lg,u=+b.dataset.u,n=+b.dataset.a;window.scrollTo(0,0);
+ if(a==="say"){window.scrollTo(0,window.scrollY);if(!say(b.dataset.s,l))alert("Audio isn’t available on this device.");return false}
+ if(a==="pick"){lg=l;lv="home"}
+ else if(a==="home"){lv="home";if(l==="none")lg=null}
+ else if(a==="sounds")lv="sounds";
+ else if(a==="learn"){lv="learn";lu=u;LGD[l].units[u].p.forEach(function(p,j){var k=u+"_"+j;if(!LP[l].c[k])LP[l].c[k]=[1,Date.now()+864e5]});saveLP()}
+ else if(a==="quiz")startQuiz(l,u);
+ else if(a==="opt"){if(qz.pick!==null)return false;var q=qz.qs[qz.n],o=q.o[n],ok=o[0]===qz.u&&o[1]===q.j;qz.pick=n;if(ok)qz.score++;grade(qz.l,qz.u,q.j,ok)}
+ else if(a==="qnext"){qz.n++;qz.pick=null}
+ else if(a==="review")startReview(l);
+ else if(a==="show")rv.show=true;
+ else if(a==="grade"){var c=rv.list[rv.n];if(c)grade(rv.l,c[0],c[1],n===1);rv.n++;rv.show=false}
+ else if(a==="talk"){tk={u:u,t:0,pick:null,tr:false,ord:[0,1,2].sort(shf)};lv="talk";lu=u}
+ else if(a==="topt"){if(tk.pick!==null)return false;tk.pick=n}
+ else if(a==="tnext"){tk.t++;tk.pick=null;tk.tr=false;tk.ord=[0,1,2].sort(shf)}
+ else if(a==="ttr"){tk.tr=!tk.tr;window.scrollTo(0,window.scrollY)}}
+function pickView(){var h='<h1>Languages</h1><p class="muted">Guided lessons built around real situations: greetings, eating out, getting around, shopping and small talk. Each unit has phrases with sound, a quiz, and a conversation with a local.</p>';
+ ["zh","ko"].forEach(function(l){var t=0,s=Object.keys(LP[l].c).filter(function(k){return okc(l,k)}).length;LGD[l].units.forEach(function(x){t+=x.p.length});
+  h+='<button class="card langcard" data-lg="pick" data-l="'+l+'"><span class="nat big" lang="'+LGD[l].v+'">'+LGD[l].nat+'</span><b>'+LGD[l].n+'</b><small class="rom">'+s+' of '+t+' phrases started, '+due(l).length+' due for review</small></button>'});
+ return h+aud()}
+function homeView(){var l=lg,L2=LGD[l],h=lb("home","none","","All languages")+'<h1>'+L2.n+'</h1><p class="muted">Work through the units in order. Each one has phrases, a quiz and a conversation.</p><div class="row">'+lb("sounds",l,"","Sounds guide","btn ghost")+lb("review",l,"",'Review ('+due(l).length+' due)',"btn")+'</div><div style="height:12px"></div>';
+ L2.units.forEach(function(x,i){var s=x.p.filter(function(p,j){return LP[l].c[i+"_"+j]}).length;
+  h+='<div class="item"><div><b>Unit '+(i+1)+': '+esc(x.t)+'</b><small>'+s+' of '+x.p.length+' phrases started</small></div><div class="ulinks">'+lb("learn",l,' data-u="'+i+'"',"Learn")+lb("quiz",l,' data-u="'+i+'"',"Quiz")+lb("talk",l,' data-u="'+i+'"',"Talk")+'</div></div>'});
+ return h+aud()}
+function soundsView(){var l=lg,S2=LGD[l].snd,h=lb("home",l,"","Back to units")+'<h1>Sounds guide</h1>';
+ if(l==="zh"){h+='<h3 class="sec">The four tones</h3>';S2.tones.forEach(function(t){h+='<div class="card pc">'+nat(l,t[0])+'<small class="rom">'+t[1]+', '+t[3]+'</small><p class="muted">'+t[2]+'</p>'+listen(l,t[0])+'</div>'})}
+ else{[["Consonants",S2.c],["Vowels",S2.v]].forEach(function(g){h+='<h3 class="sec">'+g[0]+'</h3><div class="grid">';g[1].forEach(function(c){h+='<button data-lg="say" data-l="'+l+'" data-s="'+c[2]+'"><b lang="ko-KR">'+c[0]+'</b><small>'+c[1]+'</small></button>'});h+='</div>'})}
+ h+='<h3 class="sec">Tips</h3>';S2.tips.forEach(function(t){h+='<p class="body">'+t+'</p>'});return h+aud()}
+function learnView(){var l=lg,U=LGD[l].units[lu],h=lb("home",l,"","Back to units")+'<h1>'+esc(U.t)+'</h1><div class="note"><b>Local tip.</b> '+esc(U.tip)+'</div>'+(U.g?'<div class="note"><b>How it works.</b> '+esc(U.g)+'</div>':"");
+ U.p.forEach(function(p){h+='<div class="card pc">'+nat(l,p[0])+'<small class="rom">'+esc(p[1])+'</small><p class="muted">'+esc(p[2])+'</p>'+listen(l,p[0])+'</div>'});
+ return h+'<div class="row">'+lb("quiz",l,' data-u="'+lu+'"',"Take the quiz","btn")+lb("talk",l,' data-u="'+lu+'"',"Talk with a local","btn ghost")+'</div>'+aud()}
+function quizView(){var l=qz.l,U=LGD[l].units[qz.u],q=qz.qs[qz.n];
+ if(!q)return'<h1>Quiz complete</h1><div class="card"><p class="body">You got '+qz.score+' of '+qz.qs.length+' right. Missed phrases will come back in your reviews.</p><div class="row">'+lb("learn",l,' data-u="'+qz.u+'"',"Study the phrases","btn ghost")+lb("talk",l,' data-u="'+qz.u+'"',"Talk with a local","btn")+'</div></div>';
+ var p=U.p[q.j],h='<p class="muted">Question '+(qz.n+1)+' of '+qz.qs.length+'</p><div class="card">';
+ h+=q.t===0?'<p class="q">Listen and choose the meaning</p><button class="btn" data-lg="say" data-l="'+l+'" data-s="'+esc(p[0])+'">Listen</button><div style="height:12px"></div>':'<p class="q">How do you say: “'+esc(p[2])+'”?</p>';
+ q.o.forEach(function(o,n){var ph=LGD[l].units[o[0]].p[o[1]],c="opt";if(qz.pick!==null){if(o[0]===qz.u&&o[1]===q.j)c+=" right";else if(n===qz.pick)c+=" wrong"}
+  h+='<button class="'+c+'" data-lg="opt" data-l="'+l+'" data-a="'+n+'"'+(qz.pick!==null?" disabled":"")+'>'+(q.t===0?esc(ph[2]):nat(l,ph[0])+'<small>'+esc(ph[1])+'</small>')+'</button>'});
+ if(qz.pick!==null)h+='<p class="muted">'+esc(p[0])+' ('+esc(p[1])+') means “'+esc(p[2])+'”.</p><div class="row">'+listen(l,p[0])+lb("qnext",l,"",qz.n+1<qz.qs.length?"Next":"See score","btn")+'</div>';
+ return h+'</div>'}
+function reviewView(){var l=rv.l,c=rv.list[rv.n],back=lb("home",l,"","Back to units");
+ if(!c)return back+'<h1>Review</h1><div class="card"><p class="body">'+(rv.list.length?"All done for now. Cards return at spaced intervals, so come back later.":"Nothing is due yet. Learn a unit first, and its phrases will appear here for review.")+'</p></div>';
+ var p=LGD[l].units[c[0]].p[c[1]],h=back+'<p class="muted">Card '+(rv.n+1)+' of '+rv.list.length+'</p><div class="card"><p class="q">'+esc(p[2])+'</p>';
+ if(rv.show)h+=nat(l,p[0])+'<small class="rom">'+esc(p[1])+'</small>'+listen(l,p[0])+'<div class="row">'+lb("grade",l,' data-a="0"',"Again","btn ghost")+lb("grade",l,' data-a="1"',"Got it","btn")+'</div>';
+ else h+='<p class="muted">Try to say it, then check.</p><div class="row">'+lb("show",l,"","Show answer","btn")+'</div>';
+ return h+'</div>'}
+function talkView(){var l=lg,U=LGD[l].units[tk.u],d=U.d[tk.t],back=lb("home",l,"","Back to units");
+ if(!d)return back+'<h1>Conversation complete</h1><div class="card"><p class="body">Nicely done. You finished the conversation for “'+esc(U.t)+'”. Play it again for practice, or move on to the next unit.</p><div class="row">'+lb("talk",l,' data-u="'+tk.u+'"',"Play again","btn")+lb("home",l,"","Back to units","btn ghost")+'</div></div>';
+ var s=d[0],h=back+'<p class="muted">'+esc(U.t)+', exchange '+(tk.t+1)+' of '+U.d.length+'</p><div class="card"><div class="bubble">'+nat(l,s[0])+'<small>'+esc(s[1])+'</small>'+((tk.tr||tk.pick!==null)?'<small>'+esc(s[2])+'</small>':"")+'<div>'+listen(l,s[0])+lb("ttr",l,"",(tk.tr?"Hide":"Show")+" translation")+'</div></div><p class="q">Your reply</p>';
+ tk.ord.forEach(function(n){var o=d[1][n],c="opt";if(tk.pick!==null){if(o[3])c+=" right";else if(n===tk.pick)c+=" wrong"}
+  h+='<button class="'+c+'" data-lg="topt" data-l="'+l+'" data-a="'+n+'"'+(tk.pick!==null?" disabled":"")+'>'+nat(l,o[0])+'<small>'+esc(o[1])+'</small>'+(tk.pick!==null?'<small>'+esc(o[2])+'</small>':"")+'</button>'});
+ if(tk.pick!==null){var r=d[1].filter(function(o){return o[3]})[0];h+='<div class="row">'+listen(l,r[0])+lb("tnext",l,"",tk.t+1<U.d.length?"Continue":"Finish","btn")+'</div>'}
+ return h+'</div>'+aud()}
+function langView(){if(!lg)return pickView();return({sounds:soundsView,learn:learnView,quiz:quizView,review:reviewView,talk:talkView}[lv]||homeView)()}
+
+var lib=[],libT=0,syncing=false,syncP=null,syncMsg="",syncMsg2="";
+function loadLib(){lib=[];libT=0;try{var o=JSON.parse(localStorage.getItem(libKey())||"{}");if(Array.isArray(o.a))lib=o.a.filter(function(x){return x&&typeof x.title==="string"&&typeof x.extract==="string"&&!adult(x.title+" "+x.extract)}).slice(0,60);libT=+o.t||0}catch(e){lib=[]}}
+function saveLib(){var pay=function(){return JSON.stringify({t:libT,a:lib.map(function(x){return{title:x.title,extract:x.extract,desc:x.desc||"",thumb:x.thumb||"",url:x.url||"",topic:x.topic||"Wikipedia",ft:x.ft||"",read:!!x.read}})})};
+ try{localStorage.setItem(libKey(),pay())}catch(e){for(var i=lib.length-1;i>=0;i--){if(lib[i].ft){lib[i].ft="";try{localStorage.setItem(libKey(),pay());return}catch(e2){}}}}}
+function addLib(items){items.forEach(function(a){if(!lib.some(function(x){return x.title===a.title}))lib.unshift({title:a.title,extract:a.extract,desc:a.desc||"",thumb:a.thumb||"",url:a.url,topic:a.topic,ft:a.ft||"",read:false})});
+ while(lib.length>60){var k=-1,i;for(i=lib.length-1;i>=0;i--){if(S.saved2.indexOf(lib[i].title)<0&&lib[i].read){k=i;break}}if(k<0)for(i=lib.length-1;i>=0;i--){if(S.saved2.indexOf(lib[i].title)<0){k=i;break}}if(k<0)break;lib.splice(k,1)}saveLib()}
+function fullUrl(t){returnwk()+"/w/api.php?action=query&prop=extracts&explaintext=1&exsectionformat=plain&exchars=9000&redirects=1&titles="+encodeURIComponent(t)+"&format=json&origin=*"}
+function prefetch(items){var q=items.slice(),w=function(){var it=q.shift();if(!it)return Promise.resolve();var a=lib.filter(function(x){return x.title===it.title})[0];if(!a||a.ft)return w();
+ return getj(fullUrl(a.title)).then(function(j){var p=j.query.pages,k=Object.keys(p)[0];a.ft=(p[k]&&p[k].extract)||"";saveLib()}).catch(function(){}).then(w)};w();w()}
+function syncLib(){if(syncing)return syncP;if(navigator.onLine===false)return Promise.reject(0);syncing=true;syncMsg="Updating your library…";if(tab==="me")render();
+ var ks=pickTopics(12),pairs={};
+ syncP=Promise.all(extra(pairs).concat(ks.map(function(t){var k=LT[t],kw=k[rnd(k.length)];return getj(wk()+"/w/api.php?action=query&list=search&srsearch="+encodeURIComponent(kw)+"&srnamespace=0&srlimit=20&sroffset="+rnd(100)+"&format=json&origin=*").then(function(j){var r=(j.query&&j.query.search)||[];r=r.filter(function(x){return!lib.some(function(y){return y.title===x.title})});if(r.length)pairs[r[rnd(r.length)].title]=t}).catch(function(){})})))
+ .then(function(){var ts=Object.keys(pairs);if(!ts.length)throw 0;return getj(wk()+"/w/api.php?action=query&prop=extracts|pageimages|info&inprop=url&exintro=1&explaintext=1&exlimit=max&piprop=thumbnail&pithumbsize=480&redirects=1&titles="+encodeURIComponent(ts.join("|"))+"&format=json&origin=*")}).then(function(j){var p=(j.query&&j.query.pages)||{},out=[];
+  Object.keys(p).forEach(function(id){var x=p[id];if(!x.extract||x.extract.length<250||adult(x.title+" "+x.extract)||/may (also )?refer to/.test(x.extract.slice(0,200)))return;out.push({title:x.title,extract:x.extract.trim(),thumb:x.thumbnail?x.thumbnail.source:"",url:x.fullurl,topic:pairs[x.title]||"Wikipedia"})});
+  if(!out.length)throw 0;addLib(out);libT=Date.now();saveLib();syncing=false;syncMsg="";prefetch(out);return out})
+ .catch(function(e){syncing=false;syncMsg="";throw e});return syncP}
+
+function plain(s){return new DOMParser().parseFromString(s,"text/html").body.textContent||""}
+function doSearch(q){q=(q||"").trim();SQ=q;var my=++stok;SR=null;SE="";if(!q){SL=false;render();return}SL=true;render();
+ getj(wk()+"/w/api.php?action=query&list=search&srsearch="+encodeURIComponent(q)+"&srnamespace=0&srlimit=15&format=json&origin=*").then(function(j){if(my!==stok)return;SR=(j.query&&j.query.search)||[];SL=false;render()}).catch(function(){if(my!==stok)return;SL=false;SE="Couldn’t reach Wikipedia. Curated lessons that match are still shown.";render()})}
+function searchView(){var h='<h1>Search</h1><div class="sbox"><input id="sq" type="search" placeholder="Search any topic" value="'+esc(SQ)+'" aria-label="Search" autocomplete="off"><button class="btn" data-x="dosearch">Search</button></div>';
+ if(!SQ)return h+'<p class="muted">Search Wikipedia for anything, from black holes to the Silk Road. Matching curated lessons appear first.</p>';
+ var ql=SQ.toLowerCase(),loc=[];D.forEach(function(d,i){if((d[1]+" "+d[2]).toLowerCase().indexOf(ql)>=0)loc.push(i)});
+ if(loc.length){h+='<h3 class="sec">Curated lessons</h3>';loc.forEach(function(i){h+='<div class="item"><div><b>'+D[i][1]+'</b><small>'+D[i][0]+'</small></div><button class="link" data-open="'+i+'">Read</button></div>'})}
+ h+='<h3 class="sec">Wikipedia</h3>';
+ if(SL)h+='<p class="muted">Searching…</p>';else if(SE)h+='<p class="warn">'+SE+'</p>';else if(SR&&!SR.length)h+='<p class="muted">No results. Try different words.</p>';
+ else if(SR)SR.filter(function(r){return!adult(r.title+" "+plain(r.snippet))}).forEach(function(r){h+='<div class="item"><div><b>'+esc(r.title)+'</b><small>'+esc(plain(r.snippet))+'…</small></div><button class="link" data-openl="'+esc(r.title)+'">Read</button></div>'});
+ return h}
 function ints(a){return Array.isArray(a)?a.filter(function(x){return Number.isInteger(x)&&x>=0&&x<D.length}).filter(function(x,i,s){return s.indexOf(x)===i}):[]}
 function load(){try{var r=localStorage.getItem("margin3")||localStorage.getItem("margin2");if(r){var o=JSON.parse(r),d=DEF();
  d.learned=ints(o.learned);d.saved=ints(o.saved);
  d.saved2=Array.isArray(o.saved2)?o.saved2.filter(function(x){return typeof x==="string"&&x.length<200}).slice(0,200):[];
  d.streak=Math.max(0,+o.streak||0);d.last=typeof o.last==="string"?o.last:"";d.total=Math.max(0,+o.total||0);
  if(o.td&&typeof o.td.d==="string"&&Array.isArray(o.td.k))d.td={d:o.td.d,k:o.td.k.filter(function(x){return typeof x==="string"}).slice(0,500)};
- d.mode=o.mode==="curated"?"curated":"live";
+ d.mode=o.mode==="curated"?"curated":"live";d.mature=o.mature!==false;d.simple=!!o.simple;
  if(o.rem&&typeof o.rem==="object"){var m=o.rem;d.rem.on=!!m.on;d.rem.mode=m.mode==="random"?"random":"daily";if(/^\d\d:\d\d$/.test(m.time))d.rem.time=m.time;d.rem.fired=String(m.fired||"");d.rem.rd=String(m.rd||"");d.rem.rt=+m.rt||0}
  S=d}}catch(e){S=DEF()}}
 function save(){try{localStorage.setItem("margin3",JSON.stringify(S))}catch(e){storeOK=false}}
@@ -132,19 +331,23 @@ function mark(k){var t=day(new Date());if(S.td.d!==t)S.td={d:t,k:[]};if(S.td.k.i
 function rnd(n){return Math.floor(Math.random()*n)}
 function $(s){return document.querySelector(s)}
 function getj(u){var c=new AbortController(),t=setTimeout(function(){c.abort()},9000);return fetch(u,{signal:c.signal}).then(function(r){clearTimeout(t);if(!r.ok)throw 0;return r.json()})}
-function summary(title){return getj("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(title.replace(/ /g,"_"))).then(function(j){return{title:j.title||title,extract:j.extract||"",desc:j.description||"",thumb:j.thumbnail?j.thumbnail.source:"",url:(j.content_urls&&j.content_urls.desktop&&j.content_urls.desktop.page)||"https://en.wikipedia.org/wiki/"+encodeURIComponent(title.replace(/ /g,"_")),type:j.type,topic:"Saved article"}})}
-function findLive(tp,tries){var ks=Object.keys(LT),t=tp==="All"?ks[rnd(ks.length)]:tp,k=LT[t],kw=k[rnd(k.length)];
- return getj("https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch="+encodeURIComponent(kw)+"&srnamespace=0&srlimit=30&sroffset="+rnd(120)+"&format=json&origin=*").then(function(j){var r=(j.query&&j.query.search)||[];if(!r.length)throw 0;return summary(r[rnd(r.length)].title)}).then(function(a){if(a.type!=="standard"||a.extract.length<250){if(tries>0)return findLive(tp,tries-1);throw 0}a.topic=t;return a})}
+function summary(title){return getj(wk()+"/api/rest_v1/page/summary/"+encodeURIComponent(title.replace(/ /g,"_"))).then(function(j){return{title:j.title||title,extract:j.extract||"",desc:j.description||"",thumb:j.thumbnail?j.thumbnail.source:"",url:(j.content_urls&&j.content_urls.desktop&&j.content_urls.desktop.page)||wk()+"/wiki/"+encodeURIComponent(title.replace(/ /g,"_")),type:j.type,topic:"Wikipedia"}})}
+function findLive(tp,tries){if(tp==="Anything")return getj(wk()+"/w/api.php?action=query&list=random&rnnamespace=0&rnlimit=1&format=json&origin=*").then(function(j){return summary(j.query.random[0].title)}).then(function(a){if(a.type!=="standard"||a.extract.length<250||adult(a.title+" "+a.extract)){if(tries>0)return findLive(tp,tries-1);throw 0}a.topic="Anything";return a});var ks=Object.keys(LT).filter(okT),t=tp==="All"?ks[rnd(ks.length)]:tp,k=LT[t],kw=k[rnd(k.length)];
+ return getj(wk()+"/w/api.php?action=query&list=search&srsearch="+encodeURIComponent(kw)+"&srnamespace=0&srlimit=30&sroffset="+rnd(120)+"&format=json&origin=*").then(function(j){var r=(j.query&&j.query.search)||[];if(!r.length)throw 0;return summary(r[rnd(r.length)].title)}).then(function(a){if(a.type!=="standard"||a.extract.length<250||adult(a.title+" "+a.extract)){if(tries>0)return findLive(tp,tries-1);throw 0}a.topic=t;return a})}
 function setLive(p){var my=++tok;loading=true;err="";L=null;full=false;render();p().then(function(a){if(my!==tok)return;L=a;loading=false;render()}).catch(function(){if(my!==tok)return;loading=false;err="Couldn’t reach Wikipedia. Check your connection, or switch to Curated lessons, which work offline.";render()})}
-function nextLive(){setLive(function(){return findLive(topic,5)})}
-function loadFull(){var a=L;a.fl="loading";render();getj("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&explaintext=1&exsectionformat=plain&exchars=9000&redirects=1&titles="+encodeURIComponent(a.title)+"&format=json&origin=*").then(function(j){var p=j.query.pages,k=Object.keys(p)[0];a.ft=(p[k]&&p[k].extract)||"";a.fl=a.ft?"done":"error";if(L===a)render()}).catch(function(){a.fl="error";if(L===a)render()})}
+function libPick(){var c=lib.filter(function(x){return !adult(x.title+" "+x.extract)&&okT(x.topic)&&(topic==="All"||x.topic===topic)&&!x.read});if(!c.length)c=lib.filter(function(x){return !adult(x.title+" "+x.extract)&&okT(x.topic)&&(topic==="All"||x.topic===topic)});if(!c.length)return null;var it=c[rnd(c.length)];it.fl="";return it}
+function nextLive(){var it=libPick();
+ if(it){L=it;loading=false;err="";full=false;render();if(lib.filter(function(x){return!x.read}).length<6&&navigator.onLine!==false)syncLib().catch(function(){});return}
+ if(navigator.onLine===false){L=null;loading=false;err="You’re offline and nothing is saved for this topic yet. Connect once and articles will download for offline reading. Curated lessons work offline.";render();return}
+ setLive(function(){return lib.length?findLive(topic,5).then(function(a){addLib([a]);return lib.filter(function(x){return x.title===a.title})[0]||a}):syncLib().then(function(){var x=libPick();if(!x)throw 0;return x})})}
+function loadFull(){var a=L;a.fl="loading";render();getj(wk()+"/w/api.php?action=query&prop=extracts&explaintext=1&exsectionformat=plain&exchars=9000&redirects=1&titles="+encodeURIComponent(a.title)+"&format=json&origin=*").then(function(j){var p=j.query.pages,k=Object.keys(p)[0];a.ft=(p[k]&&p[k].extract)||"";a.fl=a.ft?"done":"error";saveLib();if(L===a)render()}).catch(function(){a.fl="error";if(L===a)render()})}
 function pool(){var p=[];D.forEach(function(d,i){if(topic==="All"||d[0]===topic)p.push(i)});return p}
 function pick(){var p=pool(),c=p.filter(function(i){return seen.indexOf(i)<0});
  if(!c.length){seen=[];c=p.filter(function(i){return i!==cur});if(!c.length)c=p}
  var u=c.filter(function(i){return S.learned.indexOf(i)<0});if(u.length)c=u;cur=c[rnd(c.length)];seen.push(cur);answered=null;msg="";full=false}
 function liveCard(){if(loading)return'<div class="card"><p class="muted">Finding something worth reading…</p></div>';
  if(err)return'<div class="card"><p>'+err+'</p><div class="row"><button class="btn" data-x="next">Try again</button><button class="btn ghost" data-src="curated">Curated lessons</button></div></div>';
- if(!L)return"";var a=L,h='<article class="card">'+(a.thumb?'<img class="thumb" alt="" src="'+esc(a.thumb)+'">':"")+'<p class="kicker">'+esc(a.topic)+'</p><h2>'+esc(a.title)+'</h2>'+(a.desc?'<p class="desc">'+esc(a.desc)+'</p>':"")+'<p class="body">'+esc(a.extract)+'</p>';
+ if(!L)return"";var a=L,h='<article class="card">'+(a.thumb?'<img class="thumb" alt="" onerror="this.remove()" src="'+esc(a.thumb)+'">':"")+'<p class="kicker">'+esc(a.topic)+'</p><h2>'+esc(a.title)+'</h2>'+(a.desc?'<p class="desc">'+esc(a.desc)+'</p>':"")+'<p class="body">'+esc(a.extract)+'</p>';
  if(a.fl==="done"){a.ft.split("\n").forEach(function(l){l=l.trim();if(!l)return;h+=(l.length<60&&!/[.:;,]$/.test(l))?'<h3 class="sec">'+esc(l)+'</h3>':'<p class="body">'+esc(l)+'</p>'});h+='<p class="muted">The article continues on Wikipedia.</p>'}
  else if(a.fl==="loading")h+='<p class="muted">Loading the full article…</p>';
  else h+=(a.fl==="error"?'<p class="warn">Couldn’t load the full article.</p>':"")+'<div class="row"><button class="btn" data-x="lfull">Read the full article</button></div>';
@@ -154,8 +357,8 @@ function curCard(){if(cur===null||(topic!=="All"&&D[cur][0]!==topic))pick();var 
  h+='<p class="body">'+d[2]+'</p><p class="q">'+d[3]+'</p>';
  d[4].forEach(function(o,i){var c="opt";if(answered){if(i===d[5])c+=" right";else if(i===answered.pick)c+=" wrong"}h+='<button class="'+c+'" data-o="'+i+'"'+(answered?" disabled":"")+'>'+o+'</button>'});
  return h+'<p class="muted" aria-live="polite">'+msg+'</p><div class="row">'+(F[d[1]]?'<button class="btn" data-x="full">Study in full</button>':"")+'<button class="btn ghost" data-x="save">'+(S.saved.indexOf(cur)>=0?"Unsave":"Save for later")+'</button><button class="btn ghost" data-x="next">Next</button></div></article>'}
-function read(){var live=S.mode==="live",h='<div class="seg" role="group" aria-label="Source"><button data-src="live" aria-pressed="'+live+'">Live from Wikipedia</button><button data-src="curated" aria-pressed="'+!live+'">Curated lessons</button></div><div class="chips" role="group" aria-label="Topics">';
- ["All"].concat(live?Object.keys(LT):T).forEach(function(t){h+='<button class="chip" aria-pressed="'+(t===topic)+'" data-topic="'+t+'">'+(t==="All"?"Surprise me":t)+'</button>'});
+function read(){var live=S.mode==="live",h='<div class="seg" role="group" aria-label="Source"><button data-src="live" aria-pressed="'+live+'">Articles</button><button data-src="curated" aria-pressed="'+!live+'">Curated lessons</button></div><div class="chips" role="group" aria-label="Topics">';
+ (live?["All","Anything"].concat(Object.keys(LT).filter(okT)):["All"].concat(T)).forEach(function(t){h+='<button class="chip" aria-pressed="'+(t===topic)+'" data-topic="'+t+'">'+(t==="All"?"Surprise me":t)+'</button>'});
  h+='</div>';if(!storeOK)h+='<p class="warn">Your browser is blocking saving, so progress will be lost when you close this page.</p>';
  if(todayN()>=24)h+='<p class="note">You’ve read '+todayN()+' today. 24 is a good place to stop, but there’s no limit.</p>';
  if(banner)h+='<div class="banner"><span>'+esc(banner)+'</span><button class="link" data-x="banner">Dismiss</button></div>';
@@ -167,13 +370,15 @@ function perm(){return("Notification" in window)?Notification.permission:"unsupp
 function calLink(){var n=new Date(),t=S.rem.time.split(":"),p=function(x){return String(x).padStart(2,"0")},s=n.getFullYear()+p(n.getMonth()+1)+p(n.getDate())+"T"+t[0]+t[1]+"00";
  return"https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent("Read on Margin")+"&details="+encodeURIComponent("Time to learn something new.")+"&dates="+s+"/"+s+"&recur="+encodeURIComponent("RRULE:FREQ=DAILY")}
 function me(){var r=S.rem,pm=perm(),h='<h1>You</h1><div class="stats"><div><b>'+todayN()+'</b>read today<small>suggested: 24</small></div><div><b>'+S.streak+'</b>day streak</div><div><b>'+S.total+'</b>read in total</div></div>';
+ h+='<div class="panel"><h3>Content</h3><label><input type="checkbox" id="ssim"'+(S.simple?" checked":"")+'> Simple English, easier to read</label><p class="muted">Articles come from Wikipedia. Adult and explicit articles are filtered out.</p></div>';
+ h+='<div class="panel"><h3>Offline library</h3><p class="muted">'+lib.length+' articles are saved on this device and open without internet.'+(libT?' Last updated '+new Date(libT).toLocaleString()+'.':'')+'</p><p class="muted" aria-live="polite">'+(syncMsg||syncMsg2)+'</p><div class="row"><button class="btn ghost" data-x="sync">Update now</button></div></div>';
  h+='<div class="panel"><h3>Reminders</h3><label><input type="checkbox" id="ron"'+(r.on?" checked":"")+'> Remind me to read</label><div class="row"><button class="chip" aria-pressed="'+(r.mode==="daily")+'" data-rmode="daily">Same time daily</button><button class="chip" aria-pressed="'+(r.mode==="random")+'" data-rmode="random">Random time</button></div>';
  h+=r.mode==="daily"?'<label>At <input type="time" id="rt" value="'+r.time+'"></label>':'<p class="muted">One reminder a day at a random time between 9am and 9pm.</p>';
  h+='<div class="row"><button class="btn ghost" data-x="allow">'+(pm==="granted"?"Notifications allowed":"Allow notifications")+'</button><button class="btn ghost" data-x="test">Send a test</button></div><p class="muted" aria-live="polite">'+(remMsg||(pm==="denied"?"Notifications are blocked for this site in your browser settings.":pm==="unsupported"?"Notifications aren’t available here, so reminders show inside the app.":""))+'</p>';
  h+='<p class="muted">Reminders only fire while the app is open. For one that always arrives, add it to your calendar.</p><div class="row"><a class="btn" target="_blank" rel="noopener" href="'+calLink()+'">Add a daily calendar reminder</a></div></div><button class="link" data-x="reset">Reset my progress</button>';return h}
 function render(){$("#today").textContent=todayN()+" read today";
  [].forEach.call(document.querySelectorAll("nav button"),function(b){b.dataset.t===tab?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current")});
- try{$("#view").innerHTML=({read:read,saved:saved,me:me})[tab]()}catch(e){$("#view").innerHTML='<p>Something went wrong. Open the You tab and choose Reset my progress, then reload.</p>';cur=null}}
+ try{$("#view").innerHTML=({read:read,search:searchView,lang:langView,saved:saved,me:me})[tab]()}catch(e){$("#view").innerHTML='<p>Something went wrong. Open the You tab and choose Reset my progress, then reload.</p>';cur=null}}
 function fire(test){var d=D[rnd(D.length)],body="Today’s reading is waiting: "+d[1];remMsg="";
  if(perm()==="granted"){try{var n=new Notification("Margin",{body:body});n.onclick=function(){window.focus();tab="read";render();n.close()};if(test)remMsg="Sent. Check your notifications."}catch(e){remMsg="Your browser wouldn’t show a system notification."}}
  else if(test)remMsg="Allow notifications first, or the reminder only appears inside the app.";
@@ -182,31 +387,36 @@ function tick(){var r=S.rem;if(!r.on)return;var n=new Date(),t=day(n),m=n.getHou
  if(r.mode==="random"){if(r.rd!==t){r.rd=t;r.rt=540+rnd(720);save()}tg=r.rt}else{var p=r.time.split(":");tg=(+p[0])*60+(+p[1])}
  if(r.fired!==t&&m>=tg){r.fired=t;save();fire(false)}}
 document.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var x=b.dataset.x,up=function(){window.scrollTo(0,0)};
- if(b.dataset.t){tab=b.dataset.t;up()}
+ if(b.dataset.lg){if(lgAct(b)!==false)render();return}
+ else if(b.dataset.t){tab=b.dataset.t;up()}
+ else if(x==="dosearch"){doSearch($("#sq").value);return}
  else if(b.dataset.src){S.mode=b.dataset.src;topic="All";save();if(S.mode==="live"){if(!L)nextLive();else render();return}else{pick()}}
  else if(b.dataset.topic){topic=b.dataset.topic;if(S.mode==="live"){nextLive();return}cur=null;seen=[]}
  else if(b.dataset.o!==undefined&&!answered){var p=+b.dataset.o,ok=p===D[cur][5];answered={pick:p};if(S.learned.indexOf(cur)<0)S.learned.push(cur);mark("c"+cur);msg=ok?"Right. Added to what you’ve read.":"Close. The right answer is marked, and this page still counts as read.";save()}
- else if(x==="next"){if(S.mode==="live"){if(L)mark("w"+L.title);nextLive();up();return}mark("c"+cur);pick();up()}
- else if(x==="lfull"){mark("w"+L.title);loadFull();return}
+ else if(x==="next"){if(S.mode==="live"){if(L){mark("w"+L.title);L.read=true;saveLib()}nextLive();up();return}mark("c"+cur);pick();up()}
+ else if(x==="lfull"){mark("w"+L.title);L.read=true;saveLib();if(!L.ft){loadFull();return}L.fl="done"}
  else if(x==="full"){mark("c"+cur);full=true;up()}
  else if(x==="brief"){full=false;up()}
  else if(x==="save"){if(S.mode==="live"&&L){var k=S.saved2.indexOf(L.title);k<0?S.saved2.push(L.title):S.saved2.splice(k,1)}else{var j=S.saved.indexOf(cur);j<0?S.saved.push(cur):S.saved.splice(j,1)}save()}
  else if(x==="banner")banner="";
- else if(b.dataset.openl){tab="read";S.mode="live";var tt=b.dataset.openl;setLive(function(){return summary(tt)});up();return}
+ else if(b.dataset.openl){tab="read";S.mode="live";var tt=b.dataset.openl;setLive(function(){var it=lib.filter(function(x){return x.title===tt})[0];return it?Promise.resolve(it):summary(tt)});up();return}
  else if(b.dataset.open){cur=+b.dataset.open;S.mode="curated";topic="All";seen=[cur];answered=null;msg="";full=false;tab="read";up()}
  else if(b.dataset.rml){S.saved2=S.saved2.filter(function(t){return t!==b.dataset.rml});save()}
  else if(b.dataset.rm){S.saved=S.saved.filter(function(i){return i!==+b.dataset.rm});save()}
  else if(b.dataset.rmode){S.rem.mode=b.dataset.rmode;S.rem.fired="";save()}
+ else if(x==="sync"){syncMsg2="";syncLib().then(function(){syncMsg2="Library updated.";render()}).catch(function(){syncMsg2=navigator.onLine===false?"You’re offline. Your saved articles are still available.":"Couldn’t update just now. Try again in a moment.";render()});render();return}
  else if(x==="allow"){try{var q=Notification.requestPermission(function(){render()});if(q&&q.then)q.then(function(){render()},function(){})}catch(er){remMsg="Notifications aren’t available in this browser."}}
  else if(x==="test")fire(true);
  else if(x==="reset"){if(confirm("Reset all progress and saved pages?")){var rm=S.rem,md=S.mode;S=DEF();S.rem=rm;S.mode=md;save()}}
  else return;render()});
 document.addEventListener("change",function(e){var i=e.target;
+ if(i.id==="ssim"){S.simple=i.checked;save();loadLib();L=null;topic="All";syncMsg2="";nextLive();if(navigator.onLine!==false)syncLib().catch(function(){});return}
  if(i.id==="ron"){S.rem.on=i.checked;S.rem.fired="";save();if(i.checked&&perm()==="default"){try{Notification.requestPermission(function(){render()})}catch(er){}}tick();render()}
  else if(i.id==="rt"&&/^\d\d:\d\d$/.test(i.value)){S.rem.time=i.value;S.rem.fired="";save();render()}});
+document.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="sq"){e.preventDefault();doSearch(e.target.value)}});
 document.addEventListener("visibilitychange",function(){if(!document.hidden)tick()});
 window.addEventListener("focus",tick);
-load();if(S.mode==="live")nextLive();else{pick();render()}tick();setInterval(tick,30000);
+loadLP();load();loadLib();var hh=location.hash.replace("#","");if(["read","search","lang","saved","me"].indexOf(hh)>=0)tab=hh;if(S.mode==="live")nextLive();else{pick();render()}tick();setInterval(tick,30000);if(navigator.onLine!==false)syncLib().then(function(){if(tab==="me")render()}).catch(function(){});window.addEventListener("online",function(){if(err&&S.mode==="live")nextLive();syncLib().then(function(){if(tab==="me")render()}).catch(function(){})});
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
 </script>
 </body>
